@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button';
 // Re-import layout components
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ThemeToggle from '@/components/layout/ThemeToggle';
+
 
 // Lucide icons
 import { Home, MapPin, Building2, Filter, Grid3x3, List, ChevronRight, Phone, Mail } from 'lucide-react';
@@ -41,6 +41,7 @@ interface Project {
 }
 
 // --- DEFINE RAW PROJECTS OUTSIDE THE COMPONENT ---
+// Add 'as const' to assert the literal types for 'status'
 const rawProjectsData = [
   {
     id: 1,
@@ -122,12 +123,14 @@ const rawProjectsData = [
     state: "Rajasthan",
     status: "In Progress"
   }
-];
+] as const; // Add 'as const' here
 
 // --- MAP PROJECTS ONCE, OUTSIDE THE COMPONENT ---
+// Explicitly type the result of the map operation
 const allProjects: Project[] = rawProjectsData.map(p => ({
   ...p,
-  slug: generateSlug(p.title)
+  slug: generateSlug(p.title),
+  // The 'status' property is now correctly typed thanks to 'as const' on rawProjectsData
 }));
 
 
@@ -175,7 +178,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, isDarkMode }) => {
 };
 
 const ProjectsShowcase = () => {
-  const { theme, systemTheme, resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === 'dark';
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -240,7 +243,7 @@ const ProjectsShowcase = () => {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors">
         <div className="text-xl text-gray-700 dark:text-gray-300 animate-pulse">
-          
+          Loading...
         </div>
       </div>
     );
@@ -323,7 +326,7 @@ const ProjectsShowcase = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
             >
-              Showcasing cutting-edge solar construction and development projects across India's key states.
+              Showcasing cutting-edge solar construction and development projects across India&apos;s key states.
             </motion.p>
           </div>
         </motion.div>

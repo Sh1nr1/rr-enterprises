@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform, useInView } from 'framer-motion';
 import { 
@@ -17,6 +18,12 @@ import {
   Users,
   Settings
 } from 'lucide-react';
+
+// Define the interface for AnimatedCounter props
+interface AnimatedCounterProps {
+  end: number;
+  duration?: number; // Optional prop with a default value
+}
 
 const SolarCommercialPage = () => {
   const [isDark, setIsDark] = useState(true);
@@ -75,15 +82,16 @@ const SolarCommercialPage = () => {
     { title: "Monitoring & Support", icon: Clock, description: "24/7 system monitoring and maintenance" }
   ];
 
-  const AnimatedCounter = ({ end, duration = 2000 }) => {
+  // Apply the AnimatedCounterProps interface here
+  const AnimatedCounter: React.FC<AnimatedCounterProps> = ({ end, duration = 2000 }) => {
     const [count, setCount] = useState(0);
-    const ref = React.useRef();
+    const ref = React.useRef(null); // Initialize useRef with null
     const inView = useInView(ref);
 
     useEffect(() => {
       if (inView) {
-        let startTime;
-        const animate = (timestamp) => {
+        let startTime: number; // Specify type for startTime
+        const animate = (timestamp: number) => { // Specify type for timestamp
           if (!startTime) startTime = timestamp;
           const progress = Math.min((timestamp - startTime) / duration, 1);
           setCount(Math.floor(progress * end));
@@ -91,7 +99,7 @@ const SolarCommercialPage = () => {
         };
         requestAnimationFrame(animate);
       }
-    }, [inView, end, duration]);
+    }, [inView, end, duration]); // Add duration to dependency array
 
     return <span ref={ref}>{count}</span>;
   };
@@ -288,7 +296,7 @@ const SolarCommercialPage = () => {
                   <p className="text-gray-300 dark:text-gray-400 text-center leading-relaxed">
                     Solar energy is the fastest-growing renewable energy source globally. 
                     With declining costs and improving technology, now is the perfect time 
-                    to invest in your business's sustainable future.
+                    to invest in your business&apos;s sustainable future.
                   </p>
                 </div>
               </motion.div>

@@ -23,7 +23,7 @@ const ThemeToggle: React.FC<ThemeToggleProps> = ({
 }) => {
   // useTheme provides `theme`, `setTheme`, and `resolvedTheme`
   // `resolvedTheme` is the actual theme applied (takes system preference into account)
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   // `mounted` state is crucial for `next-themes` and SSR
   // It ensures UI that depends on `resolvedTheme` is only rendered client-side

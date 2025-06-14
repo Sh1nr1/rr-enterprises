@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, Variant, Transition, easeInOut } from 'framer-motion';
+import { motion, Transition, easeInOut } from 'framer-motion';
 import Link from 'next/link';
-import { Sun, Moon, Zap, Building, Factory, Settings, ArrowRight, Sparkles, Home, ChevronRight as IconChevronRight } from 'lucide-react'; // Renamed ChevronRight to avoid conflict
+import { Sun, Building, Factory, Settings, ArrowRight, Sparkles, Home, ChevronRight as IconChevronRight } from 'lucide-react'; // Renamed ChevronRight to avoid conflict
 import Navbar from '@/components/layout/Navbar'; // Assuming Navbar component exists
 import Footer from '@/components/layout/Footer'; // Assuming Footer component exists
 import ThemeToggle from '@/components/layout/ThemeToggle'; // Assuming ThemeToggle component exists

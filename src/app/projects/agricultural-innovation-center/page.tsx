@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Sprout, Tractor, Lightbulb, FlaskConical } from 'lucide-react'; // Added Agri-specific icons
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home,  BookOpen, Briefcase, Calculator, Phone, Sprout, Tractor, Lightbulb, FlaskConical } from 'lucide-react'; // Added Agri-specific icons
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -104,9 +104,6 @@ export default function AgriculturalInnovationCenterPage() {
     ? 'shadow-[0_0_30px_rgba(144,238,144,0.3),_0_0_60px_rgba(124,252,0,0.2)]' // Green glow for agriculture
     : 'shadow-[0_0_20px_rgba(144,238,144,0.1),_0_0_40px_rgba(124,252,0,0.08)]';
 
-  const headerGradient = mounted && isDarkMode
-    ? 'from-white via-green-200 to-lime-300'
-    : 'from-gray-900 via-green-600 to-lime-700';
 
   const titleGradient = mounted && isDarkMode
     ? 'from-lime-400 via-green-500 to-emerald-600'
@@ -409,9 +406,9 @@ export default function AgriculturalInnovationCenterPage() {
               <p className="text-lime-400 font-medium">Director, AgriTech Foundation</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises' expertise in developing our Agricultural Innovation Center was invaluable.
+              &apos;RR Enterprises&apos; expertise in developing our Agricultural Innovation Center was invaluable.
               Their meticulous planning and execution have provided us with a world-class facility that will drive
-              agricultural advancements for years to come. A truly outstanding partnership."
+              agricultural advancements for years to come. A truly outstanding partnership.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -486,7 +483,7 @@ export default function AgriculturalInnovationCenterPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

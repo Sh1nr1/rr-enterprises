@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone } from 'lucide-react'; // Renamed ChevronRight to avoid conflict
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, BookOpen, Briefcase, Calculator, Phone } from 'lucide-react'; // Renamed ChevronRight to avoid conflict
 import Navbar from '@/components/layout/Navbar'; // Assuming Navbar component exists
 import Footer from '@/components/layout/Footer'; // Assuming Footer component exists
 import ThemeToggle from '@/components/layout/ThemeToggle'; // Assuming ThemeToggle component exists
@@ -88,9 +88,7 @@ const SolarProjectShowcase = () => {
     ? 'shadow-[0_0_30px_rgba(34,197,94,0.3),_0_0_60px_rgba(59,130,246,0.2)]' // Green and blue neon
     : 'shadow-[0_0_20px_rgba(34,197,94,0.1),_0_0_40px_rgba(59,130,246,0.08)]'; // Subtle glow for light mode
 
-  const headerGradient = isDarkMode
-    ? 'from-white via-cyan-200 to-blue-300'
-    : 'from-gray-900 via-cyan-600 to-blue-700';
+
 
   const titleGradient = isDarkMode
     ? 'from-green-400 via-blue-500 to-purple-600'
@@ -169,7 +167,7 @@ const SolarProjectShowcase = () => {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Powering Tomorrow's Energy Today: A flagship solar project transforming the Silicon Valley Corporate Campus.
+            Powering Tomorrow&apos;s Energy Today: A flagship solar project transforming the Silicon Valley Corporate Campus.
           </motion.p>
         </motion.header>
 
@@ -382,9 +380,9 @@ const SolarProjectShowcase = () => {
               <p className="text-green-400 font-medium">Chief Operations Officer, TechCorp Industries</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises transformed our facility with their innovative solar solution.
-              The installation was seamless, and we're already seeing a **40% reduction in our energy costs**.
-              Their team's expertise and professionalism exceeded our expectations, truly a partner for the future."
+              &quot;RR Enterprises transformed our facility with their innovative solar solution.
+              The installation was seamless, and we&apos;re already seeing a **40% reduction in our energy costs**.
+              Their team&apos;s expertise and professionalism exceeded our expectations, truly a partner for the future.&quot;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -459,7 +457,7 @@ const SolarProjectShowcase = () => {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Lightbulb, Droplet } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, BookOpen, Briefcase, Calculator, Phone, Lightbulb, Droplet } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -190,7 +190,7 @@ export default function DesertSolarInstallationPage() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Harnessing the abundant solar energy of Rajasthan's desert for a sustainable future.
+            Harnessing the abundant solar energy of Rajasthan&apos;s desert for a sustainable future.
           </motion.p>
         </motion.header>
 
@@ -287,7 +287,7 @@ export default function DesertSolarInstallationPage() {
                 <p className={`text-lg leading-relaxed ${mounted && isDarkMode ? 'opacity-80' : 'opacity-90'}`}>
                   Development of a large-scale **solar power plant** spanning over **100 acres** in the Thar Desert.
                   This project integrates advanced photovoltaic technology and aims to provide clean, renewable energy
-                  to the grid, significantly reducing carbon emissions and contributing to India's renewable energy goals.
+                  to the grid, significantly reducing carbon emissions and contributing to India&apos;s renewable energy goals.
                 </p>
               </div>
             </motion.div>
@@ -405,9 +405,9 @@ export default function DesertSolarInstallationPage() {
               <p className="text-yellow-400 font-medium">CEO, Solar Dynamics Ltd</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "The solar installation by RR Enterprises in Jodhpur is a landmark project. Their expertise in
+              &apos;The solar installation by RR Enterprises in Jodhpur is a landmark project. Their expertise in
               desert conditions and commitment to sustainable energy truly impressed us. This plant is a testament
-              to their engineering prowess and our shared vision for a green future."
+              to their engineering prowess and our shared vision for a green future.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -482,7 +482,7 @@ export default function DesertSolarInstallationPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

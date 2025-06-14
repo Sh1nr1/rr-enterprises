@@ -148,7 +148,7 @@ const TestimonialsSection: React.FC = () => {
 
                       {/* Quote */}
                       <blockquote className="text-xl md:text-2xl font-medium text-gray-800 dark:text-gray-200 text-center leading-relaxed mb-8 relative z-10">
-                        "{testimonials[currentIndex].quote}"
+                        &apos;{testimonials[currentIndex].quote}&apos;
                       </blockquote>
 
                       {/* Author Info */}
@@ -230,7 +230,7 @@ const TestimonialsSection: React.FC = () => {
             Ready to Transform Your Business?
           </h3>
           <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join our satisfied clients and experience the RR Enterprises difference. Let's build the future together.
+            Join our satisfied clients and experience the RR Enterprises difference. Let&apos;s build the future together.
           </p>
           <motion.button
             whileHover={{ scale: 1.05 }}

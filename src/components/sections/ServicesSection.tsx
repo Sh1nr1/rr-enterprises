@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, Variants, Transition } from 'framer-motion';
+import { motion,  Transition } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {

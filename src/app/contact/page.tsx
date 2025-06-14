@@ -13,13 +13,8 @@ import {
   MessageSquare,
   Zap,
   Building2,
-  Home,
-  Info,
-  Briefcase,
-  Lightbulb,
-  BookOpen,
-  Calculator,
-  Users,
+  Calculator
+  
 } from 'lucide-react';
 import { useTheme } from 'next-themes'; // Import useTheme
 import dynamic from 'next/dynamic';
@@ -27,7 +22,7 @@ import dynamic from 'next/dynamic';
 // Assuming these are in your components directory
 const Navbar = dynamic(() => import('@/components/layout/Navbar'), { ssr: false });
 const Footer = dynamic(() => import('@/components/layout/Footer'), { ssr: false });
-import ThemeToggle from '@/components/layout/ThemeToggle';
+
 
 const ContactPage = () => {
   const { resolvedTheme } = useTheme(); // Get the resolved theme
@@ -207,7 +202,7 @@ const ContactPage = () => {
             variants={itemVariants}
             className={`text-xl ${isDark ? 'text-gray-300' : 'text-gray-600'}`}
           >
-            Connect with the future. Let's build something extraordinary together.
+            Connect with the future. Let&apos;s build something extraordinary together.
           </motion.p>
         </motion.div>
 
@@ -377,7 +372,7 @@ const ContactPage = () => {
                       Message Sent!
                     </h3>
                     <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                      Thank you for reaching out. We'll get back to you within 24 hours.
+                      Thank you for reaching out. We&apos;ll get back to you within 24 hours.
                     </p>
                   </motion.div>
                 )}

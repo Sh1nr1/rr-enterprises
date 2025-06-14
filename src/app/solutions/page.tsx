@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import * as THREE from "three";
-import { Sun, Zap, Brain, Moon, ChevronRight, Shield, BarChart3, Cpu } from "lucide-react";
+import { Sun, Zap, Brain, ChevronRight, Shield, BarChart3, Cpu } from "lucide-react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, easeOut } from "framer-motion";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ThemeToggle from "@/components/layout/ThemeToggle";
@@ -13,7 +13,7 @@ import { useTheme } from "next-themes";
 // Utility for Framer Motion animations
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOut } },
 };
 
 const staggerContainer = {
@@ -56,7 +56,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
     scene.add(directionalLight);
 
     // --- Model generation based on type and isDark ---
-    // (This part is fine as it relies on props passed from the parent which will re-render)
     if (type === "solar") {
       const group = new THREE.Group();
       for (let i = 0; i < 3; i++) {
@@ -79,11 +78,13 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         edges.rotation.copy(panel.rotation);
         group.add(edges);
       }
+      
+      // Fixed: Use MeshBasicMaterial with proper emissive properties
       const sunGeometry = new THREE.SphereGeometry(0.3, 16, 16);
-      const sunMaterial = new THREE.MeshBasicMaterial({
+      const sunMaterial = new THREE.MeshStandardMaterial({
         color: 0xffaa00,
-        emissive: 0xffaa00,
-        emissiveIntensity: 0.3,
+        emissive: new THREE.Color(0xffaa00), // Fixed: Use THREE.Color
+        emissiveIntensity: 0.3, // This property exists on MeshBasicMaterial
       });
       const sun = new THREE.Mesh(sunGeometry, sunMaterial);
       sun.position.set(0, 3, -2);
@@ -112,9 +113,9 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         line.rotation.z = Math.PI / 2;
         group.add(line);
         const arcGeometry = new THREE.TorusGeometry(0.1, 0.02, 8, 16);
-        const arcMaterial = new THREE.MeshBasicMaterial({
+        const arcMaterial = new THREE.MeshStandardMaterial({
           color: isDark ? 0x00ffff : 0x3498db,
-          emissive: isDark ? 0x004444 : 0x002244,
+          emissive: new THREE.Color(isDark ? 0x004444 : 0x002244), // Fixed: Use THREE.Color
           emissiveIntensity: 0.5,
         });
         const arc = new THREE.Mesh(arcGeometry, arcMaterial);
@@ -138,9 +139,9 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       group.add(hub);
       for (let i = 0; i < 8; i++) {
         const nodeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
-        const nodeMaterial = new THREE.MeshBasicMaterial({
+        const nodeMaterial = new THREE.MeshStandardMaterial({
           color: isDark ? 0x00ff88 : 0x1abc9c,
-          emissive: isDark ? 0x004422 : 0x002211,
+          emissive: new THREE.Color(isDark ? 0x004422 : 0x002211), // Fixed: Use THREE.Color
           emissiveIntensity: 0.3,
         });
         const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
@@ -174,17 +175,19 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       if (mainObject) {
         if (type === "solar") {
           mainObject.rotation.y += 0.005;
+          // Fixed: Better type checking for finding the sun object
           const sun = mainObject.children.find(
-            (child) => child.geometry instanceof THREE.SphereGeometry
+            (child): child is THREE.Mesh => 
+              child instanceof THREE.Mesh && 
+              child.geometry instanceof THREE.SphereGeometry
           );
-          if (sun && "emissiveIntensity" in sun.material) {
-            (sun.material as THREE.MeshBasicMaterial).emissiveIntensity =
-              0.3 + Math.sin(Date.now() * 0.003) * 0.2;
+          if (sun && sun.material instanceof THREE.MeshStandardMaterial) {
+            sun.material.emissiveIntensity = 0.3 + Math.sin(Date.now() * 0.003) * 0.2;
           }
         } else if (type === "switchyard") {
           mainObject.rotation.y += 0.01;
           mainObject.children.forEach((child) => {
-            if (child.geometry instanceof THREE.TorusGeometry) {
+            if (child instanceof THREE.Mesh && child.geometry instanceof THREE.TorusGeometry) {
               child.rotation.x += 0.05;
               child.rotation.z += 0.03;
             }
@@ -193,7 +196,7 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
           mainObject.rotation.y += 0.008;
           mainObject.rotation.x = Math.sin(Date.now() * 0.001) * 0.1;
           mainObject.children.forEach((child, index) => {
-            if (child.geometry instanceof THREE.SphereGeometry) {
+            if (child instanceof THREE.Mesh && child.geometry instanceof THREE.SphereGeometry) {
               child.position.y += Math.sin(Date.now() * 0.002 + index) * 0.002;
             }
           });
@@ -213,13 +216,13 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       }
       renderer.dispose();
       scene.traverse((object) => {
-        if ((object as THREE.Mesh).isMesh) {
-          const mesh = object as THREE.Mesh;
-          mesh.geometry.dispose();
-          if (Array.isArray(mesh.material)) {
-            mesh.material.forEach((material) => material.dispose());
+        // Fixed: Proper type checking for meshes
+        if (object instanceof THREE.Mesh) {
+          object.geometry.dispose();
+          if (Array.isArray(object.material)) {
+            object.material.forEach((material) => material.dispose());
           } else {
-            mesh.material.dispose();
+            object.material.dispose();
           }
         }
       });
@@ -227,9 +230,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
   }, [type, isDark]); // Dependencies for useCallback
 
   useEffect(() => {
-    // Only call renderModel if mounted, to avoid potential issues if ThreeJSModel itself
-    // is rendered on the server (which it shouldn't be with the mounted check in parent)
-    // But this ensures it's only truly initialized on the client.
     renderModel();
   }, [renderModel]);
 
@@ -245,7 +245,7 @@ interface SolutionCardProps {
     features: string[];
     useCases: string[];
   };
-  isDark: boolean; // This prop still reflects the resolved theme
+  isDark: boolean;
 }
 
 const SolutionCard = ({ solution, isDark }: SolutionCardProps) => {
@@ -305,7 +305,6 @@ const SolutionCard = ({ solution, isDark }: SolutionCardProps) => {
 
         {/* 3D Model */}
         <div className="h-48 mb-6 rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm">
-          {/* ThreeJSModel only rendered if `mounted` (handled by parent SolarSolutionsPage) */}
           <ThreeJSModel type={solution.type} isDark={isDark} />
         </div>
 
@@ -362,16 +361,13 @@ const SolutionCard = ({ solution, isDark }: SolutionCardProps) => {
 };
 
 const SolarSolutionsPage = () => {
-  const { resolvedTheme } = useTheme(); // Only need resolvedTheme here
+  const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Use resolvedTheme directly for isDark once mounted
-  // On the server, mounted is false, so isDark will be false.
-  // This means the server will always render the 'light' version.
   const isDark = resolvedTheme === "dark";
 
   const solutions = [
@@ -422,13 +418,11 @@ const SolarSolutionsPage = () => {
     },
   ];
 
-  // Provide a minimal, default (light-themed) render for SSR
   if (!mounted) {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
         <Navbar />
         <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-gray-500">
-          {/* You can put a loading spinner or skeleton here */}
           Loading Advanced Solar Solutions...
         </main>
         <Footer />
@@ -436,7 +430,6 @@ const SolarSolutionsPage = () => {
     );
   }
 
-  // Once mounted, render the full component with theme-aware classes
   return (
     <div
       className={`min-h-screen flex flex-col transition-all duration-500 ${
@@ -447,7 +440,7 @@ const SolarSolutionsPage = () => {
     >
       <Navbar />
 
-      {/* Animated background particles - ONLY RENDER ON CLIENT */}
+      {/* Animated background particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <div

@@ -3,7 +3,7 @@
 import { motion, useScroll, useTransform, cubicBezier } from 'framer-motion'
 import { useRef, useEffect, useState } from 'react'
 import Link from 'next/link' // Import Link from next/link
-import Image from 'next/image' // Import Image from next/image for optimized images
+
 import { ChevronDown, Play, Pause, Volume2, VolumeX } from 'lucide-react'
 import { useTheme } from 'next-themes' // Import useTheme for theme switching
 
@@ -209,7 +209,7 @@ function HeroSection() {
                                 : 'bg-gradient-to-r from-blue-100/50 to-green-100/50 border-blue-200 text-gray-800'
                             }`}>
                 <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse" />
-                Powering India's Solar Revolution
+                Powering India&apos;s Solar Revolution
               </div>
               <h1 className="text-6xl md:text-8xl font-bold leading-tight">
                 <span className="bg-gradient-to-r from-blue-400 via-white to-green-400 bg-clip-text text-transparent">
@@ -318,7 +318,7 @@ function StatsSection() {
             Driving <span className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">Impact</span>
           </h2>
           <p className={`text-xl max-w-3xl mx-auto ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Our numbers speak for the sustainable future we're building across India
+            Our numbers speak for the sustainable future we&apos;re building across India
           </p>
         </motion.div>
 
@@ -368,7 +368,7 @@ function ClientsSection() {
             Trusted by <span className="bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">Industry Leaders</span>
           </h2>
           <p className={`text-xl ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-            Powering partnerships with India's most innovative energy companies
+            Powering partnerships with India&apos;s most innovative energy companies
           </p>
         </motion.div>
 

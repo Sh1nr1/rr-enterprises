@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion, easeInOut, easeIn, easeOut } from 'framer-motion';
+import { motion, easeInOut, easeOut } from 'framer-motion';
 import { ArrowRight, Zap, Rocket, Sparkles } from 'lucide-react';
 
 interface CTASectionProps {

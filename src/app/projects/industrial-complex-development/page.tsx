@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Factory, HardHat } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, BookOpen, Briefcase, Calculator, Phone, Factory, HardHat } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -106,9 +106,7 @@ export default function IndustrialComplexDevelopmentPage() {
     ? 'shadow-[0_0_30px_rgba(255,165,0,0.3),_0_0_60px_rgba(255,140,0,0.2)]' // Orange glow for industrial
     : 'shadow-[0_0_20px_rgba(255,165,0,0.1),_0_0_40px_rgba(255,140,0,0.08)]';
 
-  const headerGradient = mounted && isDarkMode
-    ? 'from-white via-orange-200 to-amber-300'
-    : 'from-gray-900 via-orange-600 to-amber-700';
+
 
   const titleGradient = mounted && isDarkMode
     ? 'from-orange-400 via-yellow-500 to-red-600'
@@ -411,8 +409,8 @@ export default function IndustrialComplexDevelopmentPage() {
               <p className="text-orange-400 font-medium">Head of Infrastructure, Gujarat Industries Ltd</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises delivered an exceptional industrial complex, exceeding our expectations in both design and execution.
-              Their commitment to quality and timely delivery was remarkable. This development is a cornerstone for our future growth."
+              &apos;RR Enterprises delivered an exceptional industrial complex, exceeding our expectations in both design and execution.
+              Their commitment to quality and timely delivery was remarkable. This development is a cornerstone for our future growth.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -487,7 +485,7 @@ export default function IndustrialComplexDevelopmentPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

@@ -23,8 +23,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   },
   ...motionProps
 }) => {
-  const { theme, resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
+  useTheme();
 
   return (
     <motion.section

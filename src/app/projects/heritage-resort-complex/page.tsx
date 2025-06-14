@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Hotel, Leaf } from 'lucide-react'; // Added Hotel, Leaf for resort context
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, BookOpen, Briefcase, Calculator, Phone, Hotel, Leaf } from 'lucide-react'; // Added Hotel, Leaf for resort context
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -403,7 +403,7 @@ export default function HeritageResortComplexPage() {
               <p className="text-amber-400 font-medium">CEO, Royal Hospitality Group</p> {/* Changed text color */}
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises transformed our vision into a breathtaking reality with the Heritage Resort Complex. Their dedication to preserving cultural essence while integrating luxury was exceptional. This resort is truly a jewel of Rajasthan."
+              &apos;RR Enterprises transformed our vision into a breathtaking reality with the Heritage Resort Complex. Their dedication to preserving cultural essence while integrating luxury was exceptional. This resort is truly a jewel of Rajasthan.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -476,7 +476,7 @@ export default function HeritageResortComplexPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

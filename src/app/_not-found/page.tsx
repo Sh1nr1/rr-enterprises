@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Head from 'next/head'; // For SEO metadata
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Home, Mail, RefreshCw, ChevronDown, ChevronUp, Terminal, Zap, BookOpen, Building, Briefcase, Calculator, Phone } from 'lucide-react';
+import { Home, Mail, RefreshCw, ChevronDown, ChevronUp, Terminal, Zap, BookOpen, Building, Briefcase, Calculator} from 'lucide-react';
 import Navbar from '@/components/layout/Navbar'; // Assuming you have a Navbar component
 import Footer from '@/components/layout/Footer'; // Assuming you have a Footer component
 import ThemeToggle from '@/components/layout/ThemeToggle'; // Assuming you have a ThemeToggle component
@@ -117,7 +117,7 @@ interface NotFoundPageProps {
   onNavigate: (destination: string) => void;
 }
 
-const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
+const NotFoundPage: React.FC<NotFoundPageProps> = ({ }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.9 }}
@@ -167,8 +167,8 @@ const NotFoundPage: React.FC<NotFoundPageProps> = ({ onNavigate }) => {
               transition={{ delay: 0.8 }}
               className="text-gray-300 text-lg mb-8 leading-relaxed"
             >
-              The digital realm you're seeking has drifted into the void.
-              Let's navigate you back to familiar territory.
+              The digital realm you&apos;re seeking has drifted into the void.
+              Let&apos;s navigate you back to familiar territory.
             </motion.p>
 
             {/* Action Buttons */}
@@ -278,7 +278,7 @@ interface ErrorPageProps {
   };
 }
 
-const ErrorPage: React.FC<ErrorPageProps> = ({ onNavigate, errorDetails }) => {
+const ErrorPage: React.FC<ErrorPageProps> = ({ errorDetails }) => {
   const [showTrace, setShowTrace] = useState(false);
   const [retrying, setRetrying] = useState(false);
 

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { motion, AnimatePresence, useInView, easeOut, UseInViewOptions } from 'framer-motion'
 import {
   Briefcase,
@@ -219,7 +219,7 @@ const CareersPage = () => {
     prompt += `Job Description: ${jobDescription}\n\n`;
     prompt += `The cover letter should be concise, highlight relevant skills, and express enthusiasm for the role and company (RR Enterprises, focused on AI-driven solar automation).`;
 
-    let chatHistory = [];
+    const chatHistory = [];
     chatHistory.push({ role: "user", parts: [{ text: prompt }] });
 
     const payload = { contents: chatHistory };
@@ -294,8 +294,8 @@ const CareersPage = () => {
               className={`max-w-2xl mx-auto p-6 rounded-2xl backdrop-blur-sm border bg-white/5 border-white/10`}
             >
               <p className="text-lg leading-relaxed">
-                At RR Enterprises, we're not just building products—we're crafting the future. Our
-                team of visionaries, innovators, and technologists work together to solve tomorrow's
+                At RR Enterprises, we&apos;re not just building products—we&apos;re crafting the future. Our
+                team of visionaries, innovators, and technologists work together to solve tomorrow&apos;s
                 challenges today. Join us in creating solutions that matter.
               </p>
             </motion.div>
@@ -332,7 +332,7 @@ const CareersPage = () => {
             </motion.h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {jobRoles.map((job, index) => (
+              {jobRoles.map((job) => (
                 <motion.div
                   key={job.id}
                   variants={itemVariants}
@@ -413,10 +413,10 @@ const CareersPage = () => {
             className={`max-w-4xl mx-auto text-center p-12 rounded-3xl backdrop-blur-sm border bg-white/5 border-white/10`}
           >
             <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-pink-400 bg-clip-text text-transparent">
-              Don't See Your Role?
+              Don&apos;t See Your Role?
             </h2>
             <p className="text-xl opacity-80 mb-8">
-              We're always looking for exceptional talent to join our pioneering team.
+              We&apos;re always looking for exceptional talent to join our pioneering team.
             </p>
             <motion.button
               onClick={() => {

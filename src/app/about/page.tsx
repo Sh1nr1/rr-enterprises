@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
@@ -221,7 +221,7 @@ export default function AboutPage() {
               className="inline-flex items-center px-6 py-3 mb-8 bg-blue-500/20 border border-blue-400/30 rounded-full backdrop-blur-sm"
             >
               <Sun className="w-5 h-5 mr-2 text-yellow-400" />
-              <span className="text-sm font-medium">Powering India's Solar Revolution</span>
+              <span className="text-sm font-medium">Powering India&apos;s Solar Revolution</span>
             </motion.div>
 
             <motion.h1
@@ -235,7 +235,7 @@ export default function AboutPage() {
               variants={itemVariants}
               className="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed"
             >
-              Leading India's transition to sustainable energy with innovative solar solutions,
+              Leading India&apos;s transition to sustainable energy with innovative solar solutions,
               exceptional service, and unwavering commitment to a cleaner future.
             </motion.p>
 
@@ -273,7 +273,7 @@ export default function AboutPage() {
                   <h3 className="text-2xl font-bold">Our Mission</h3>
                 </div>
                 <p className="text-gray-300 leading-relaxed">
-                  To accelerate India's adoption of clean energy by delivering world-class solar
+                  To accelerate India&apos;s adoption of clean energy by delivering world-class solar
                   power solutions that are reliable, efficient, and accessible to all.
                 </p>
               </motion.div>
@@ -287,7 +287,7 @@ export default function AboutPage() {
                   <h3 className="text-2xl font-bold">Our Vision</h3>
                 </div>
                 <p className="text-gray-300 leading-relaxed">
-                  To be India's most trusted solar energy partner, creating a sustainable future
+                  To be India&apos;s most trusted solar energy partner, creating a sustainable future
                   where clean energy powers every home and business.
                 </p>
               </motion.div>

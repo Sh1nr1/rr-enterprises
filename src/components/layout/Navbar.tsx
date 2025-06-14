@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
 
   const isDark = mounted && (resolvedTheme === 'dark');
 

@@ -25,10 +25,9 @@ export interface BlogPostData {
 const postsDirectory = path.join(process.cwd(), 'posts');
 
 export async function getSortedPostsData(): Promise<PostMetadata[]> {
-  // Get file names under /posts
   const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map((fileName) => {
-    // Remove ".md" from file name to get id
+    // Remove ".md" from file name to get slug
     const slug = fileName.replace(/\.md$/, '');
 
     // Read markdown file as string
@@ -38,10 +37,15 @@ export async function getSortedPostsData(): Promise<PostMetadata[]> {
     // Use gray-matter to parse the post metadata section
     const matterResult = matter(fileContents);
 
-    // Combine the data with the slug
+    // Destructure `slug` out of `matterResult.data` (if it exists in frontmatter)
+    // and collect the rest of the properties into `restOfFrontmatter`.
+    
+    const { slug: _frontmatterSlug, ...restOfFrontmatter } = matterResult.data as PostMetadata;
+
+    // Combine the data with the slug, ensuring the filename-derived slug is used
     return {
-      slug,
-      ...(matterResult.data as PostMetadata),
+      slug, // This is the canonical slug from the filename
+      ...restOfFrontmatter, // Spread all other metadata properties from frontmatter
     };
   });
   // Sort posts by date (descending)
@@ -61,6 +65,11 @@ export async function getPostData(slug: string): Promise<BlogPostData> {
   // Use gray-matter to parse the post metadata section
   const matterResult = matter(fileContents);
 
+  // Destructure `slug` out of `matterResult.data` (if it exists in frontmatter)
+  // and collect the rest of the properties into `restOfFrontmatter`.
+  
+  const { slug: _frontmatterSlug, ...restOfFrontmatter } = matterResult.data as PostMetadata;
+
   // Use remark to convert markdown into HTML string
   const processedContent = await remark()
     .use(html)
@@ -70,8 +79,8 @@ export async function getPostData(slug: string): Promise<BlogPostData> {
   // Combine the data with the slug and contentHtml
   return {
     metadata: {
-      slug,
-      ...(matterResult.data as PostMetadata),
+      slug, // This is the canonical slug passed as an argument
+      ...restOfFrontmatter, // Spread all other metadata properties from frontmatter
     },
     content: contentHtml,
   };

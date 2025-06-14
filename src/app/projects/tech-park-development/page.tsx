@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Factory, HardHat, Code, Globe } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home,  BookOpen, Briefcase, Calculator, Phone,  HardHat, Code, Globe } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -104,9 +104,6 @@ export default function TechParkDevelopmentPage() {
     ? 'shadow-[0_0_30px_rgba(139,92,246,0.3),_0_0_60px_rgba(124,58,237,0.2)]' // Purple glow for tech
     : 'shadow-[0_0_20px_rgba(139,92,246,0.1),_0_0_40px_rgba(124,58,237,0.08)]';
 
-  const headerGradient = mounted && isDarkMode
-    ? 'from-white via-purple-200 to-indigo-300'
-    : 'from-gray-900 via-purple-600 to-indigo-700';
 
   const titleGradient = mounted && isDarkMode
     ? 'from-purple-400 via-indigo-500 to-blue-600'
@@ -409,9 +406,9 @@ export default function TechParkDevelopmentPage() {
               <p className="text-purple-400 font-medium">CEO, TechnoSpace Solutions</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises' development of our new tech park was seamless and truly transformative.
+              &apos;RR Enterprises&apos; development of our new tech park was seamless and truly transformative.
               The innovative design and timely completion have provided us with a world-class environment
-              for our teams to thrive and innovate."
+              for our teams to thrive and innovate.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -486,7 +483,7 @@ export default function TechParkDevelopmentPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>

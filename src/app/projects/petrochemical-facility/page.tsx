@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home, Mail, BookOpen, Briefcase, Calculator, Phone, Factory, HardHat, FlaskConical } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Sun, Zap, Calendar, Users, MapPin, Play, Pause, ChevronRight as IconChevronRight, Home,  BookOpen, Briefcase, Calculator, Phone, Factory, HardHat, FlaskConical } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 import ThemeToggle from '@/components/layout/ThemeToggle';
@@ -406,7 +406,7 @@ export default function PetrochemicalFacilityPage() {
               <p className="text-purple-400 font-medium">Chief Operations Officer, Petro Industries</p>
             </div>
             <blockquote className={`text-2xl font-light leading-relaxed mb-6 italic ${mounted && isDarkMode ? 'text-slate-200' : 'text-gray-800'}`}>
-              "RR Enterprises' expertise in petrochemical construction is unparalleled. They delivered a state-of-the-art facility that not only meets but exceeds our operational and environmental standards. A truly professional and reliable partner."
+              &apos;RR Enterprises&apos; expertise in petrochemical construction is unparalleled. They delivered a state-of-the-art facility that not only meets but exceeds our operational and environmental standards. A truly professional and reliable partner.&apos;
             </blockquote>
             <div className="flex justify-center space-x-1">
               {[...Array(5)].map((_, i) => (
@@ -481,7 +481,7 @@ export default function PetrochemicalFacilityPage() {
               Discover More About RR Enterprises
             </h3>
             <p className={`text-lg mb-8 max-w-2xl mx-auto ${mounted && isDarkMode ? 'text-slate-300' : 'text-slate-700'}`}>
-              Whether you're looking for comprehensive services, a rewarding career, or insightful blog posts, we're here to help.
+              Whether you&apos;re looking for comprehensive services, a rewarding career, or insightful blog posts, we&apos;re here to help.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto">
               <Link href="/services" passHref legacyBehavior>
