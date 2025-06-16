@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     title: "Leading Solar EPC Solutions",
     description: "Harness the power of tomorrow with our cutting-edge solar technologies.",
     url: "https://rrenterprises.one", // Replace with your actual domain
-    siteName: "Advanced Solar Solutions",
+    siteName: "RR Enterprises",
     images: [
       {
         url: "https://rrenterprises.one/rr-logo.png", // Replace with a default Open Graph image
