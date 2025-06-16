@@ -10,7 +10,7 @@ import { Home, Mail, Terminal, Zap, BookOpen, Building, Briefcase, Calculator } 
 // Assuming these components are in your project
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
-import ThemeToggle from '@/components/layout/ThemeToggle'; // If you want this on 404
+ // If you want this on 404
 
 // Re-use your GlitchText, FloatingParticles, SpaceAnimation components here
 // You might want to put these into a separate utility/component file, e.g., components/animations/NotFoundAnimations.tsx
