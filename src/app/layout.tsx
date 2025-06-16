@@ -12,7 +12,7 @@ const geistMono = GeistMono;
 
 export const metadata: Metadata = {
   title: {
-    default: "Advanced Solar Solutions", // This will be the title for routes without a page.tsx metadata.title
+    default: "RR Enterprises", // This will be the title for routes without a page.tsx metadata.title
     template: "%s | Advanced Solar Solutions", // This template will be used for pages that define their own title
   },
   description: "Harness the power of tomorrow with our cutting-edge solar technologies. From intelligent panels to AI-driven grid management, we deliver enterprise-grade solutions that transform how energy is generated, managed, and distributed.",
