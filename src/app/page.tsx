@@ -7,6 +7,10 @@ import Link from 'next/link' // Import Link from next/link
 import { ChevronDown, Play, Pause, Volume2, VolumeX } from 'lucide-react'
 import { useTheme } from 'next-themes' // Import useTheme for theme switching
 
+// Import Vercel Analytics and Speed Insights
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 // Import shared components
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -460,6 +464,8 @@ export default function HomePage() {
         </motion.div>
       </main>
       <Footer /> {/* Integrated Footer */}
+      <Analytics /> {/* Vercel Analytics */}
+      <SpeedInsights /> {/* Vercel Speed Insights */}
     </div>
   )
 }
