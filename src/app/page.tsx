@@ -165,7 +165,7 @@ function HeroSection() {
           playsInline
           className="w-full h-full object-cover"
         >
-          <source src="/videos/hero-background.mp4" type="video/mp4" />
+          <source src="public/videos/hero-background.mp4" type="video/mp4" />
         </video>
         {/* Adjusted overlay for light/dark theme impact on video */}
         <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-b from-black/30 via-black/50 to-black/70' : 'bg-gradient-to-b from-black/10 via-black/30 to-black/50'}`} />
