@@ -5,6 +5,10 @@ import { GeistMono } from "geist/font/mono"; // Correct import for Geist Mono
 import "./globals.css";
 import { ThemeProvider } from "next-themes"; // Import ThemeProvider
 
+// Import Vercel Analytics and Speed Insights
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
 // Corrected font imports based on Geist usage
 const geistSans = GeistSans;
 const geistMono = GeistMono;
@@ -41,6 +45,8 @@ export default function RootLayout({
         >
           {children}
         </ThemeProvider>
+        <Analytics /> {/* Vercel Analytics */}
+        <SpeedInsights /> {/* Vercel Speed Insights */}
       </body>
     </html>
   );
