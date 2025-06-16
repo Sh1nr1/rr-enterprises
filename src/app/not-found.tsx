@@ -2,7 +2,7 @@
 "use client"; // Needs to be a client component for framer-motion, useState, useEffect
 
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion} from 'framer-motion';
 import Link from 'next/link';
 // No 'next/head' needed for App Router metadata
 import { Home, Mail, Terminal, Zap, BookOpen, Building, Briefcase, Calculator } from 'lucide-react';
@@ -267,7 +267,3 @@ export default function NotFound() {
 }
 
 // Metadata for this not-found page
-export const metadata = {
-  title: '404 - Page Not Found | RR Enterprises',
-  description: 'Oops! The page you are looking for does not exist on RR Enterprises website.',
-};
