@@ -50,10 +50,10 @@ const itemVariants = {
 }
 
 const statsData = [
-  { value: 800, suffix: 'Cr+', label: 'Revenue Generated', prefix: '₹' },
-  { value: 150, suffix: '+', label: 'Projects Completed' },
+  { value: 80, suffix: 'Cr+', label: 'Revenue Generated', prefix: '₹' },
+  { value: 50, suffix: '+', label: 'Projects Completed' },
   { value: 500, suffix: 'MW+', label: 'Solar Capacity' },
-  { value: 8, suffix: '+', label: 'Years Experience' },
+  { value: 9, suffix: '+', label: 'Years Experience' },
 ]
 
 const clientLogos = [
@@ -220,7 +220,7 @@ function HeroSection() {
               </h1>
               <p className={`text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed
                             ${isDark ? 'text-white/80' : 'text-gray-700'}`}>
-                Leading Solar EPC Solutions with ₹800 Cr+ Turnover
+                Leading Solar EPC Solutions with ₹80 Cr+ Turnover
               </p>
             </motion.div>
 
