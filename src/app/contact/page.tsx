@@ -13,7 +13,6 @@ import {
     Loader2,
     MessageSquare,
     Zap,
-    Calculator,
     Globe,
 } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -213,9 +212,9 @@ const ContactPage = () => {
                 }, 2500); // Display success message for 2.5 seconds
             } else {
                 // Attempt to parse error message from Formspree response
-                const errorData = await response.json();
-                const errorMessage = errorData.errors ? errorData.errors.map((err: any) => err.message).join(', ') : 'Failed to send message.';
-                throw new Error(errorMessage);
+                //const errorData = await response.json();
+                //const errorMessage = errorData.errors ? errorData.errors.map((err: any) => err.message).join(', ') : 'Failed to send message.';
+                //throw new Error(errorMessage);
             }
         } catch (error) {
             console.error("Submission error:", error);
