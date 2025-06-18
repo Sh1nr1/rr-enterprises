@@ -1,8 +1,15 @@
+/* globals.css */
+
 @import "tailwindcss";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+  Using @theme inline for Oklch variables - good!
+  The @theme block should usually not contain the actual variable definitions,
+  but rather map them. The definitions are in :root and .dark blocks.
+*/
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -45,29 +52,40 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
+  --background: oklch(1 0 0); /* Still pure white background for light mode */
+  --foreground: oklch(0.15 0.01 285); /* Very dark desaturated blue for text */
+
+  /* --- VIBRANT COLORS FOR LIGHT MODE --- */
+  --primary: oklch(0.6 0.15 260); /* A vibrant medium blue-purple */
+  --primary-foreground: oklch(0.985 0 0); /* Near white for text on primary */
+
+  --secondary: oklch(0.7 0.12 180); /* A vibrant medium teal/cyan */
+  --secondary-foreground: oklch(0.1 0.005 285); /* Dark for text on secondary */
+
+  --accent: oklch(0.8 0.18 70); /* A bright, sunny orange/gold */
+  --accent-foreground: oklch(0.1 0.005 285); /* Dark for text on accent */
+
+  --muted: oklch(0.96 0.005 285); /* Light gray for muted backgrounds */
+  --muted-foreground: oklch(0.5 0.01 285); /* Medium gray for muted text */
+
+  --card: oklch(1 0 0); /* White card */
+  --card-foreground: oklch(0.15 0.01 285); /* Dark text on card */
+
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
+  --popover-foreground: oklch(0.15 0.01 285);
+
+  --destructive: oklch(0.577 0.245 27.325); /* Keep original red if it works */
+  --border: oklch(0.92 0.004 286.32); /* Slightly darker border than muted */
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
+
+  /* Chart colors - you might want to make these more vibrant too */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.21 0.006 285.885);
@@ -79,29 +97,40 @@
 }
 
 .dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.985 0 0);
+  --background: oklch(0.141 0.005 285.823); /* Dark charcoal background for dark mode */
+  --foreground: oklch(0.985 0 0); /* Near white text */
+
+  /* --- VIBRANT COLORS FOR DARK MODE (often slightly more luminous for contrast) --- */
+  --primary: oklch(0.75 0.18 260); /* Lighter, more luminous blue-purple */
+  --primary-foreground: oklch(0.1 0.005 285); /* Dark text on primary in dark mode */
+
+  --secondary: oklch(0.8 0.15 180); /* Lighter, more luminous teal/cyan */
+  --secondary-foreground: oklch(0.1 0.005 285); /* Dark text on secondary in dark mode */
+
+  --accent: oklch(0.88 0.2 70); /* Brighter, more luminous orange/gold */
+  --accent-foreground: oklch(0.1 0.005 285); /* Dark text on accent in dark mode */
+
+  --muted: oklch(0.274 0.006 286.033); /* Darker gray for muted backgrounds */
+  --muted-foreground: oklch(0.7 0.01 285); /* Lighter gray for muted text */
+
+  --card: oklch(0.21 0.006 285.885); /* Darker card background */
+  --card-foreground: oklch(0.985 0 0); /* Near white text on card */
+
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.92 0.004 286.32);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
+
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(0.25 0.005 285); /* Even darker border */
+  --input: oklch(0.2 0.005 285);
   --ring: oklch(0.552 0.016 285.938);
+
+  /* Chart colors - make these more vibrant too if needed */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
+
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);

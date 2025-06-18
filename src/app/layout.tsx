@@ -12,20 +12,18 @@ const geistMono = GeistMono;
 
 export const metadata: Metadata = {
   title: {
-    default: "RR Enterprises", // This will be the title for routes without a page.tsx metadata.title
-    template: "%s | Advanced Solar Solutions", // This template will be used for pages that define their own title
+    default: "RR Enterprises",
+    template: "%s | Advanced Solar Solutions",
   },
   description: "Harness the power of tomorrow with our cutting-edge solar technologies. From intelligent panels to AI-driven grid management, we deliver enterprise-grade solutions that transform how energy is generated, managed, and distributed.",
-  // You might want to add other global metadata here, like openGraph, twitter, icons etc.
-  // For example:
   openGraph: {
     title: "Leading Solar EPC Solutions",
     description: "Harness the power of tomorrow with our cutting-edge solar technologies.",
-    url: "https://rrenterprises.one", // Replace with your actual domain
+    url: "https://rrenterprises.one",
     siteName: "RR Enterprises",
     images: [
       {
-        url: "https://rrenterprises.one/rr-logo.png", // Replace with a default Open Graph image
+        url: "https://rrenterprises.one/rr-logo.png",
         width: 1200,
         height: 630,
         alt: "Advanced Solar Solutions",
@@ -56,7 +54,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark" // <-- CHANGE THIS FROM "system" to "dark"
           enableSystem
           disableTransitionOnChange
         >

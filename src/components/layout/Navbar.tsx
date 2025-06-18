@@ -1,10 +1,16 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react'; // Remove Building2
+import { Menu, X, Sun, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 
-const Navbar: React.FC = () => {
+// Define the props interface for Navbar
+interface NavbarProps {
+  children?: React.ReactNode; // This line explicitly allows children
+}
+
+// Update the Navbar component to use NavbarProps
+const Navbar: React.FC<NavbarProps> = ({ children }) => { // Destructure children prop
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -29,15 +35,15 @@ const Navbar: React.FC = () => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark');
   };
 
-const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '/about' },
-  { name: 'Services', href: '/services' },
-  { name: 'Solutions', href: '/solutions'},
-  { name: 'Projects', href: '/projects' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'Blogs', href: '/blog' },
-];
+  const navLinks = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Services', href: '/services' },
+    { name: 'Solutions', href: '/solutions'},
+    { name: 'Projects', href: '/projects' },
+    { name: 'Contact', href: '/contact' },
+    { name: 'Blogs', href: '/blog' },
+  ];
 
   if (!mounted) {
     return (
@@ -192,6 +198,9 @@ const navLinks = [
                   )}
                 </div>
               </button>
+
+              {/* Render children here, typically the theme toggle from ServicesPage */}
+              {children} 
 
               {/* Mobile Menu Button */}
               <button

@@ -1,16 +1,44 @@
+// app/solutions/page.tsx
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import * as THREE from "three";
-import { Sun, Zap, Brain, ChevronRight, Shield, BarChart3, Cpu } from "lucide-react";
+import React, { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import {
+  MapPin,
+  Hammer,
+  Building,
+  ChevronRight,
+  CheckCircle,
+  Home,
+  Shield,
+  BarChart3,
+  Settings,
+  Sparkles,
+} from "lucide-react";
 import Link from "next/link";
-import { motion, easeOut } from "framer-motion";
+import { motion, easeOut, Transition } from "framer-motion";
+import { useTheme } from "next-themes";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ThemeToggle from "@/components/layout/ThemeToggle";
-import { useTheme } from "next-themes";
+import { Badge } from "@/components/ui/badge";
 
-// Utility for Framer Motion animations
+// Import dynamic from next/dynamic
+import dynamic from 'next/dynamic';
+
+// --- Dynamic import for ThreeJSModel with better loading state ---
+const DynamicThreeJSModel = dynamic(() => import('@/components/three-model'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center h-full min-h-[192px] bg-gray-100 dark:bg-gray-800 rounded-xl text-sm text-gray-500 dark:text-gray-400 animate-pulse">
+      <div className="flex flex-col items-center space-y-2">
+        <div className="w-8 h-8 border-2 border-current border-t-transparent rounded-full animate-spin" />
+        <span>Loading 3D Model...</span>
+      </div>
+    </div>
+  ),
+});
+
+// --- Memoized Framer Motion Variants ---
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.8, ease: easeOut } },
@@ -21,586 +49,539 @@ const staggerContainer = {
   animate: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
+      staggerChildren: 0.15,
     },
   },
 };
 
-const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
-  const mountRef = useRef<HTMLDivElement>(null);
-  const animationRef = useRef<number | null>(null);
-
-  const renderModel = useCallback(() => {
-    if (!mountRef.current) return;
-
-    // Clear existing canvas if any
-    while (mountRef.current.firstChild) {
-      mountRef.current.removeChild(mountRef.current.firstChild);
-    }
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, 300 / 200, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
-    renderer.setSize(300, 200);
-    renderer.setClearColor(0x000000, 0); // Transparent background
-    mountRef.current.appendChild(renderer.domElement);
-
-    let mainObject: THREE.Group | null = null;
-
-    // Lighting (can be static regardless of theme)
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
-    scene.add(ambientLight);
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 5, 5);
-    scene.add(directionalLight);
-
-    // --- Model generation based on type and isDark ---
-    if (type === "solar") {
-      const group = new THREE.Group();
-      for (let i = 0; i < 3; i++) {
-        const panelGeometry = new THREE.BoxGeometry(2, 0.1, 1.2);
-        const panelMaterial = new THREE.MeshPhongMaterial({
-          color: isDark ? 0x1a1a2e : 0x16213e,
-          shininess: 100,
-        });
-        const panel = new THREE.Mesh(panelGeometry, panelMaterial);
-        panel.position.set(i * 2.5 - 2.5, 0, 0);
-        panel.rotation.x = -Math.PI / 6;
-        group.add(panel);
-
-        const edgeGeometry = new THREE.EdgesGeometry(panelGeometry);
-        const edgeMaterial = new THREE.LineBasicMaterial({
-          color: isDark ? 0x00ff88 : 0x0088ff,
-        });
-        const edges = new THREE.LineSegments(edgeGeometry, edgeMaterial);
-        edges.position.copy(panel.position);
-        edges.rotation.copy(panel.rotation);
-        group.add(edges);
-      }
-      
-      // Fixed: Use MeshBasicMaterial with proper emissive properties
-      const sunGeometry = new THREE.SphereGeometry(0.3, 16, 16);
-      const sunMaterial = new THREE.MeshStandardMaterial({
-        color: 0xffaa00,
-        emissive: new THREE.Color(0xffaa00), // Fixed: Use THREE.Color
-        emissiveIntensity: 0.3, // This property exists on MeshBasicMaterial
-      });
-      const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-      sun.position.set(0, 3, -2);
-      group.add(sun);
-      scene.add(group);
-      mainObject = group;
-      camera.position.set(5, 2, 5);
-      camera.lookAt(0, 0, 0);
-    } else if (type === "switchyard") {
-      const group = new THREE.Group();
-      const transformerGeometry = new THREE.CylinderGeometry(0.8, 0.8, 2, 8);
-      const transformerMaterial = new THREE.MeshPhongMaterial({
-        color: isDark ? 0x2a2a4a : 0x34495e,
-      });
-      const transformer = new THREE.Mesh(transformerGeometry, transformerMaterial);
-      transformer.position.set(0, 0, 0);
-      group.add(transformer);
-      for (let i = 0; i < 4; i++) {
-        const lineGeometry = new THREE.CylinderGeometry(0.05, 0.05, 3, 8);
-        const lineMaterial = new THREE.MeshPhongMaterial({
-          color: isDark ? 0x00aaff : 0x2980b9,
-        });
-        const line = new THREE.Mesh(lineGeometry, lineMaterial);
-        const angle = (i / 4) * Math.PI * 2;
-        line.position.set(Math.cos(angle) * 2, 1.5, Math.sin(angle) * 2);
-        line.rotation.z = Math.PI / 2;
-        group.add(line);
-        const arcGeometry = new THREE.TorusGeometry(0.1, 0.02, 8, 16);
-        const arcMaterial = new THREE.MeshStandardMaterial({
-          color: isDark ? 0x00ffff : 0x3498db,
-          emissive: new THREE.Color(isDark ? 0x004444 : 0x002244), // Fixed: Use THREE.Color
-          emissiveIntensity: 0.5,
-        });
-        const arc = new THREE.Mesh(arcGeometry, arcMaterial);
-        arc.position.copy(line.position);
-        arc.position.y += 0.3;
-        group.add(arc);
-      }
-      scene.add(group);
-      mainObject = group;
-      camera.position.set(6, 3, 6);
-      camera.lookAt(0, 0, 0);
-    } else if (type === "grid") {
-      const group = new THREE.Group();
-      const hubGeometry = new THREE.OctahedronGeometry(1);
-      const hubMaterial = new THREE.MeshPhongMaterial({
-        color: isDark ? 0x6a4c93 : 0x9b59b6,
-        transparent: true,
-        opacity: 0.8,
-      });
-      const hub = new THREE.Mesh(hubGeometry, hubMaterial);
-      group.add(hub);
-      for (let i = 0; i < 8; i++) {
-        const nodeGeometry = new THREE.SphereGeometry(0.2, 8, 8);
-        const nodeMaterial = new THREE.MeshStandardMaterial({
-          color: isDark ? 0x00ff88 : 0x1abc9c,
-          emissive: new THREE.Color(isDark ? 0x004422 : 0x002211), // Fixed: Use THREE.Color
-          emissiveIntensity: 0.3,
-        });
-        const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-        const angle = (i / 8) * Math.PI * 2;
-        const radius = 2 + Math.sin(i) * 0.5;
-        node.position.set(
-          Math.cos(angle) * radius,
-          Math.sin(i * 0.7) * 1.5,
-          Math.sin(angle) * radius
-        );
-        group.add(node);
-        const points = [new THREE.Vector3(0, 0, 0), node.position.clone()];
-        const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
-        const lineMaterial = new THREE.LineBasicMaterial({
-          color: isDark ? 0x00aaff : 0x3498db,
-          transparent: true,
-          opacity: 0.4,
-        });
-        const line = new THREE.Line(lineGeometry, lineMaterial);
-        group.add(line);
-      }
-      scene.add(group);
-      mainObject = group;
-      camera.position.set(5, 3, 5);
-      camera.lookAt(0, 0, 0);
-    }
-
-    // Animation loop
-    const animate = () => {
-      animationRef.current = requestAnimationFrame(animate);
-      if (mainObject) {
-        if (type === "solar") {
-          mainObject.rotation.y += 0.005;
-          // Fixed: Better type checking for finding the sun object
-          const sun = mainObject.children.find(
-            (child): child is THREE.Mesh => 
-              child instanceof THREE.Mesh && 
-              child.geometry instanceof THREE.SphereGeometry
-          );
-          if (sun && sun.material instanceof THREE.MeshStandardMaterial) {
-            sun.material.emissiveIntensity = 0.3 + Math.sin(Date.now() * 0.003) * 0.2;
-          }
-        } else if (type === "switchyard") {
-          mainObject.rotation.y += 0.01;
-          mainObject.children.forEach((child) => {
-            if (child instanceof THREE.Mesh && child.geometry instanceof THREE.TorusGeometry) {
-              child.rotation.x += 0.05;
-              child.rotation.z += 0.03;
-            }
-          });
-        } else if (type === "grid") {
-          mainObject.rotation.y += 0.008;
-          mainObject.rotation.x = Math.sin(Date.now() * 0.001) * 0.1;
-          mainObject.children.forEach((child, index) => {
-            if (child instanceof THREE.Mesh && child.geometry instanceof THREE.SphereGeometry) {
-              child.position.y += Math.sin(Date.now() * 0.002 + index) * 0.002;
-            }
-          });
-        }
-      }
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
-      scene.traverse((object) => {
-        // Fixed: Proper type checking for meshes
-        if (object instanceof THREE.Mesh) {
-          object.geometry.dispose();
-          if (Array.isArray(object.material)) {
-            object.material.forEach((material) => material.dispose());
-          } else {
-            object.material.dispose();
-          }
-        }
-      });
-    };
-  }, [type, isDark]); // Dependencies for useCallback
-
-  useEffect(() => {
-    renderModel();
-  }, [renderModel]);
-
-  return <div ref={mountRef} className="w-full h-full" />;
+const cardHoverVariants = {
+  initial: { scale: 1, boxShadow: "0 0 0px rgba(0,0,0,0)" },
+  darkHover: {
+    scale: 1.03,
+    boxShadow:
+      "0 0 25px rgba(255, 165, 0, 0.4), 0 0 40px rgba(255, 69, 0, 0.2)",
+    transition: { type: "spring", stiffness: 300, damping: 20 } as Transition,
+  },
+  lightHover: {
+    scale: 1.03,
+    boxShadow:
+      "0 0 25px rgba(59, 130, 246, 0.4), 0 0 40px rgba(34, 197, 94, 0.2)",
+    transition: { type: "spring", stiffness: 300, damping: 20 } as Transition,
+  },
 };
 
-interface SolutionCardProps {
-  solution: {
-    title: string;
-    icon: React.ElementType;
-    type: string;
-    description: string;
-    features: string[];
-    useCases: string[];
-  };
+// --- Memoized Stat Card Component ---
+interface StatCardProps {
+  icon: React.ElementType;
+  label: string;
+  value: string;
   isDark: boolean;
 }
 
-const SolutionCard = ({ solution, isDark }: SolutionCardProps) => {
+const StatCard = React.memo(({ icon: Icon, label, value, isDark }: StatCardProps) => {
+  const combinedVariants = useMemo(() => ({
+    ...fadeInUp,
+    ...cardHoverVariants,
+  }), []);
+
   return (
     <motion.div
-      variants={fadeInUp}
-      className={`
-      relative overflow-hidden rounded-2xl border backdrop-blur-lg transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl group
-      ${
-        isDark
-          ? "bg-gray-900/30 border-gray-700/50 shadow-xl hover:shadow-cyan-500/20"
-          : "bg-white/30 border-gray-200/50 shadow-xl hover:shadow-blue-500/20"
-      }
+      variants={combinedVariants}
+      initial="initial"
+      whileInView="animate"
+      whileHover={isDark ? "darkHover" : "lightHover"}
+      viewport={{ once: true, margin: "-50px" }} // Optimized viewport
+      className={`p-6 rounded-xl backdrop-blur-lg border text-center relative overflow-hidden
+      ${isDark ? "bg-gray-800/30 border-gray-700/50" : "bg-white/30 border-gray-200/50"}
     `}
     >
-      {/* Animated gradient border */}
       <div
-        className={`
-        absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500
-        ${
-          isDark
-            ? "bg-gradient-to-r from-cyan-500/20 via-purple-500/20 to-pink-500/20"
-            : "bg-gradient-to-r from-blue-500/20 via-purple-500/20 to-teal-500/20"
-        }
-        animate-gradient-x
-      `}
+        className={`absolute inset-0 z-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300
+      ${isDark ? "bg-orange-500/10" : "bg-blue-500/10"}
+    `}
+      />
+      <div className="relative z-10">
+        <Icon
+          className={`w-8 h-8 mx-auto mb-3 ${isDark ? "text-orange-400" : "text-blue-600"}`}
+        />
+        <div
+          className={`text-3xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}
+        >
+          {value}
+        </div>
+        <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          {label}
+        </div>
+      </div>
+    </motion.div>
+  );
+});
+
+StatCard.displayName = 'StatCard';
+
+// --- Optimized Service Card Component ---
+interface Service {
+  title: string;
+  icon: React.ElementType;
+  type: string;
+  description: string;
+  features: string[];
+  processes: string[];
+}
+
+interface ServiceCardProps {
+  service: Service;
+  isDark: boolean;
+}
+
+const ServiceCard = React.memo(({ service, isDark }: ServiceCardProps) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: -100, y: -100 });
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Optimized mobile detection with useCallback
+  const checkMobile = useCallback(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
+  useEffect(() => {
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    
+    return () => window.removeEventListener("resize", checkMobile);
+  }, [checkMobile]);
+
+  // Throttled mouse move handler for better performance
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (cardRef.current && !isMobile) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+    }
+  }, [isMobile]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!isMobile) {
+      setMousePosition({ x: -100, y: -100 });
+    }
+  }, [isMobile]);
+
+  const combinedVariants = useMemo(() => ({
+    ...fadeInUp,
+    ...cardHoverVariants,
+  }), []);
+
+  // Memoized style calculation
+  const mouseStyle = useMemo(() => ({
+    background: `radial-gradient(300px circle at var(--mouse-x) var(--mouse-y), ${isDark ? "rgba(255, 165, 0, 0.15)" : "rgba(59, 130, 246, 0.15)"}, transparent 80%)`,
+    "--mouse-x": `${mousePosition.x}px`,
+    "--mouse-y": `${mousePosition.y}px`,
+  } as React.CSSProperties), [isDark, mousePosition.x, mousePosition.y]);
+
+  return (
+    <motion.div
+      ref={cardRef}
+      variants={combinedVariants}
+      initial="initial"
+      whileInView="animate"
+      viewport={{ once: true, margin: "-100px" }} // Optimized viewport
+      className={`group relative overflow-hidden rounded-2xl border backdrop-blur-lg transition-all duration-500
+                [transform-style:preserve-3d] [perspective:1000px]
+        ${isDark
+          ? "bg-gray-900/30 border-gray-700/50"
+          : "bg-white/30 border-gray-200/50"
+        }`}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      whileTap={{ scale: isMobile ? 0.98 : 1 }}
+      whileHover={isMobile ? {} : (isDark ? "darkHover" : "lightHover")}
+    >
+      {!isMobile && (
+        <div
+          className={`absolute inset-0 rounded-2xl bg-gradient-radial opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none`}
+          style={mouseStyle}
+        />
+      )}
+
+      <div
+        className={`absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${isDark
+            ? "bg-gradient-to-r from-orange-500/10 via-red-500/10 to-yellow-500/10"
+            : "bg-gradient-to-r from-blue-500/10 via-green-500/10 to-teal-500/10"
+          } animate-gradient-x`}
       />
 
-      <div className="relative z-10 p-8">
-        {/* Header */}
+      <div className="relative z-10 p-8 [transform:translateZ(20px)] group-hover:[transform:translateZ(40px)] transition-transform duration-300">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
             <div
-              className={`
-              p-3 rounded-xl
-              ${
-                isDark
-                  ? "bg-gradient-to-br from-cyan-500/20 to-purple-500/20"
-                  : "bg-gradient-to-br from-blue-500/20 to-teal-500/20"
-              }
-            `}
+              className={`p-3 rounded-xl transition-all duration-300
+              ${isDark
+                  ? "bg-gradient-to-br from-orange-500/20 to-red-500/20 group-hover:bg-orange-600/30"
+                  : "bg-gradient-to-br from-blue-500/20 to-green-500/20 group-hover:bg-blue-600/30"
+                }`}
             >
-              <solution.icon
-                className={`w-6 h-6 ${isDark ? "text-cyan-400" : "text-blue-600"}`}
-              />
+              <motion.div
+                initial={{ scale: 1 }}
+                whileHover={{ scale: 1.2, rotate: 15 }}
+                transition={{ type: "spring", stiffness: 300, damping: 10 }}
+              >
+                <service.icon
+                  className={`w-6 h-6 ${isDark ? "text-orange-400 group-hover:text-white" : "text-blue-600 group-hover:text-white"}`}
+                />
+              </motion.div>
             </div>
-            <h3 className={`text-2xl font-bold ${isDark ? "text-white" : "text-gray-800"}`}>
-              {solution.title}
-            </h3>
+            <div>
+              <h3 className={`text-xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                {service.title}
+              </h3>
+              <Badge variant="outline" className={`text-xs ${isDark ? "border-orange-400/50 text-orange-400" : "border-blue-400/50 text-blue-600"}`}>
+                {service.type}
+              </Badge>
+            </div>
           </div>
-          <ChevronRight
-            className={`w-5 h-5 ${
-              isDark ? "text-cyan-400" : "text-blue-600"
-            } group-hover:translate-x-1 transition-transform`}
-          />
+          <ChevronRight className={`w-5 h-5 transition-transform duration-300 group-hover:translate-x-1 ${isDark ? "text-gray-400" : "text-gray-500"}`} />
         </div>
 
-        {/* 3D Model */}
-        <div className="h-48 mb-6 rounded-xl overflow-hidden bg-black/20 backdrop-blur-sm">
-          <ThreeJSModel type={solution.type} isDark={isDark} />
-        </div>
-
-        {/* Description */}
-        <p className={`text-sm mb-6 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
-          {solution.description}
+        <p className={`mb-6 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+          {service.description}
         </p>
+
+        {/* 3D Model Section - Lazy loaded only when in viewport */}
+        <div className="mb-6 h-48 rounded-xl overflow-hidden border border-gray-200/20">
+          <DynamicThreeJSModel type={service.type} isDark={isDark} />
+        </div>
 
         {/* Features */}
         <div className="mb-6">
-          <h4 className={`text-lg font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
+          <h4 className={`text-sm font-semibold mb-3 ${isDark ? "text-orange-400" : "text-blue-600"}`}>
             Key Features
           </h4>
           <div className="space-y-2">
-            {solution.features.map((feature, index) => (
-              <div key={index} className="flex items-center space-x-3">
-                <div
-                  className={`w-2 h-2 rounded-full ${isDark ? "bg-cyan-400" : "bg-blue-500"}`}
-                />
+            {service.features.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="flex items-center space-x-2"
+              >
+                <CheckCircle className={`w-4 h-4 flex-shrink-0 ${isDark ? "text-green-400" : "text-green-600"}`} />
                 <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
                   {feature}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        {/* Use Cases */}
+        {/* Processes */}
         <div>
-          <h4 className={`text-lg font-semibold mb-3 ${isDark ? "text-white" : "text-gray-800"}`}>
-            Applications
+          <h4 className={`text-sm font-semibold mb-3 ${isDark ? "text-orange-400" : "text-blue-600"}`}>
+            Process Steps
           </h4>
-          <div className="flex flex-wrap gap-2">
-            {solution.useCases.map((useCase, index) => (
-              <span
+          <div className="space-y-2">
+            {service.processes.map((process, index) => (
+              <motion.div
                 key={index}
-                className={`
-                  px-3 py-1 rounded-full text-xs font-medium
-                  ${
-                    isDark
-                      ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300"
-                      : "bg-gradient-to-r from-blue-500/20 to-teal-500/20 text-blue-700"
-                  }
-                `}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 + 0.3 }}
+                className="flex items-start space-x-3"
               >
-                {useCase}
-              </span>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5
+                  ${isDark ? "bg-orange-500/20 text-orange-400" : "bg-blue-500/20 text-blue-600"}`}>
+                  {index + 1}
+                </div>
+                <span className={`text-sm ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                  {process}
+                </span>
+              </motion.div>
             ))}
           </div>
         </div>
       </div>
     </motion.div>
   );
-};
+});
 
-const SolarSolutionsPage = () => {
+ServiceCard.displayName = 'ServiceCard';
+
+// --- Main Landing Page Component ---
+const LandingPage = () => {
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  // Fix theme synchronization issue
   useEffect(() => {
     setMounted(true);
+    window.scrollTo(0, 0);
   }, []);
 
-  const isDark = resolvedTheme === "dark";
+  // Prevent theme flashing by using mounted state
+  const isDark = mounted ? resolvedTheme === "dark" : false;
 
-  const solutions = [
+  // Memoized services data to prevent unnecessary re-renders
+  const services: Service[] = useMemo(() => [
     {
-      title: "Advanced Solar Panels",
-      icon: Sun,
-      type: "solar",
-      description:
-        "Next-generation photovoltaic technology with enhanced efficiency and intelligent tracking systems for maximum energy conversion.",
+      title: "Site Preparation",
+      icon: MapPin,
+      type: "site-preparation",
+      description: "Comprehensive site assessment, soil analysis, and terrain preparation for optimal solar panel installation.",
       features: [
-        "99.8% Pure Silicon Crystalline Structure",
-        "Smart Sun Tracking Technology",
-        "Weather-Resistant Nano Coating",
-        "Real-time Performance Analytics",
-        "25-Year Power Output Guarantee",
+        "Geological survey and soil testing",
+        "Environmental impact assessment",
+        "Utility connection planning",
+        "Permit acquisition support"
       ],
-      useCases: ["Residential", "Commercial", "Industrial", "Utility Scale", "Off-Grid"],
+      processes: [
+        "Initial site inspection and feasibility study",
+        "Topographical mapping and analysis",
+        "Soil composition testing",
+        "Infrastructure planning and design"
+      ]
     },
     {
-      title: "AC-DC Integration Switchyard",
-      icon: Zap,
-      type: "switchyard",
-      description:
-        "Intelligent power conversion and distribution system that seamlessly integrates renewable energy sources with existing grid infrastructure.",
+      title: "Installation",
+      icon: Hammer,
+      type: "installation",
+      description: "Professional installation of high-efficiency solar panels with industry-leading mounting systems and electrical connections.",
       features: [
-        "Bidirectional Power Flow Control",
-        "Advanced Harmonic Filtering",
-        "Remote Monitoring & Control",
-        "Fault Detection & Isolation",
-        "Load Balancing Optimization",
+        "High-efficiency solar panels",
+        "Advanced mounting systems",
+        "Grid-tie inverter installation",
+        "Electrical safety compliance"
       ],
-      useCases: ["Grid Integration", "Microgrids", "Energy Storage", "Power Quality", "Load Management"],
+      processes: [
+        "Foundation and mounting structure setup",
+        "Solar panel array installation",
+        "Electrical wiring and connections",
+        "System testing and commissioning"
+      ]
     },
     {
-      title: "Smart AI Grid Monitoring",
-      icon: Brain,
-      type: "grid",
-      description:
-        "AI-powered monitoring and predictive analytics platform that optimizes energy distribution and prevents system failures before they occur.",
+      title: "Monitoring",
+      icon: Building,
+      type: "monitoring",
+      description: "24/7 system monitoring with real-time performance analytics and predictive maintenance capabilities.",
       features: [
-        "Machine Learning Algorithms",
-        "Predictive Maintenance",
-        "Real-time Anomaly Detection",
-        "Energy Demand Forecasting",
-        "Automated Response Systems",
+        "Real-time performance tracking",
+        "Predictive maintenance alerts",
+        "Mobile app dashboard",
+        "Energy production analytics"
       ],
-      useCases: ["Smart Cities", "Industrial IoT", "Energy Trading", "Demand Response", "Grid Stability"],
-    },
-  ];
+      processes: [
+        "Sensor installation and calibration",
+        "Data collection system setup",
+        "Performance baseline establishment",
+        "Ongoing monitoring and optimization"
+      ]
+    }
+  ], []);
 
+  // Memoized stats data
+  const stats = useMemo(() => [
+    { icon: Home, label: "Projects Completed", value: "12+" },
+    { icon: Shield, label: "Years Experience", value: "9+" },
+    { icon: BarChart3, label: "Energy Generated", value: "50MW+" },
+    { icon: Settings, label: "Certified Installers", value: "12+" }
+  ], []);
+
+  // Show loading state until theme is resolved
   if (!mounted) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50">
-        <Navbar />
-        <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center text-gray-500">
-          Loading Advanced Solar Solutions...
-        </main>
-        <Footer />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-8 h-8 border-2 border-blue-600 dark:border-orange-400 border-t-transparent rounded-full animate-spin" />
+          <span className="text-gray-600 dark:text-gray-400">Loading...</span>
+        </div>
       </div>
     );
   }
 
   return (
-    <div
-      className={`min-h-screen flex flex-col transition-all duration-500 ${
-        isDark
-          ? "bg-gradient-to-br from-gray-900 via-purple-900/20 to-gray-900"
-          : "bg-gradient-to-br from-gray-50 via-blue-50/30 to-gray-50"
-      }`}
-    >
+    <div className={`min-h-screen transition-all duration-500 ${isDark ? "bg-gray-900" : "bg-gray-50"}`}>
       <Navbar />
 
-      {/* Animated background particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className={`absolute w-1 h-1 rounded-full animate-pulse ${
-              isDark ? "bg-cyan-400/30" : "bg-blue-400/30"
-            }`}
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              animationDuration: `${2 + Math.random() * 2}s`,
-            }}
-          />
-        ))}
-      </div>
+      {/* Breadcrumb Support */}
+      <nav className={`container mx-auto px-6 py-4 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`} aria-label="breadcrumb">
+        <ol className="list-none p-0 inline-flex">
+          <li className="flex items-center">
+            <Link href="/" className={`${isDark ? "hover:text-white" : "hover:text-gray-800"}`}>
+              Home
+            </Link>
+            <ChevronRight className={`h-3 w-3 mx-2 ${isDark ? "text-gray-600" : "text-gray-400"}`} />
+          </li>
+          <li className="flex items-center">
+            <span className={`${isDark ? "text-white font-semibold" : "text-gray-800 font-semibold"}`}>Solutions</span>
+          </li>
+        </ol>
+      </nav>
 
-      <main className="relative z-10 flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        {/* Breadcrumb Navigation */}
-        <motion.nav
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="mb-8 text-sm"
-          aria-label="Breadcrumb"
-        >
-          <ol className="list-none p-0 inline-flex">
-            <li className="flex items-center">
-              <Link href="/" className={`${isDark ? "text-gray-400" : "text-gray-600"} hover:text-blue-500`}>
-                Home
+      {/* Hero Section */}
+      <section className="relative pt-8 pb-16 overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className={`absolute inset-0 ${isDark
+            ? "bg-gradient-to-br from-gray-900 via-gray-800 to-orange-900/20"
+            : "bg-gradient-to-br from-blue-50 via-white to-green-50"}`} />
+        </div>
+
+        <div className="container mx-auto px-6 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto"
+          >
+            <motion.div
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-full px-6 py-3 mb-8 border border-orange-200/20"
+            >
+              <Sparkles className={`w-5 h-5 ${isDark ? "text-orange-400" : "text-orange-600"}`} />
+              <span className={`text-sm font-semibold ${isDark ? "text-orange-400" : "text-orange-600"}`}>
+                Next-Generation Solar Solutions
+              </span>
+            </motion.div>
+
+            <h1 className={`text-5xl md:text-7xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-900"}`}>
+              Powering Tomorrow with{" "}
+              <span className={`bg-gradient-to-r bg-clip-text text-transparent ${isDark
+                ? "from-orange-400 to-yellow-400"
+                : "from-blue-600 to-green-600"}`}>
+                Clean Energy
+              </span>
+            </h1>
+
+            <p className={`text-xl mb-8 leading-relaxed ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+              Transform your property with our comprehensive solar installation services.
+              From site preparation to ongoing monitoring, we deliver sustainable energy solutions that last.
+            </p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-4 justify-center"
+            >
+              <Link href="/quote">
+                <motion.button
+                  whileHover={{ scale: 1.05, boxShadow: isDark ? "0 0 30px rgba(255, 165, 0, 0.3)" : "0 0 30px rgba(59, 130, 246, 0.3)" }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-8 py-4 rounded-xl font-semibold text-white transition-all duration-300 ${isDark
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                    : "bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+                    }`}
+                >
+                  Get Free Quote
+                </motion.button>
               </Link>
-              <ChevronRight className={`h-4 w-4 mx-2 ${isDark ? "text-gray-500" : "text-gray-400"}`} />
-            </li>
-            <li className="flex items-center">
-              <span className={`${isDark ? "text-white" : "text-gray-800"} font-medium`}>Solutions</span>
-            </li>
-          </ol>
-        </motion.nav>
 
-        {/* Header */}
-        <motion.div variants={fadeInUp} initial="initial" animate="animate" className="text-center mb-16">
-          <div className="flex justify-end items-center mb-8">
-            <ThemeToggle />
-          </div>
+              <Link href="/services">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-8 py-4 rounded-xl font-semibold border-2 transition-all duration-300 ${isDark
+                    ? "border-orange-400 text-orange-400 hover:bg-orange-400/10"
+                    : "border-blue-600 text-blue-600 hover:bg-blue-600/10"
+                    }`}
+                >
+                  Learn More
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
 
-          <h1
-            className={`text-6xl font-bold mb-6 bg-clip-text text-transparent ${
-              isDark
-                ? "bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400"
-                : "bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600"
-            }`}
-          >
-            Advanced Solar Solutions
-          </h1>
-
-          <p
-            className={`text-xl max-w-3xl mx-auto leading-relaxed ${
-              isDark ? "text-gray-300" : "text-gray-600"
-            }`}
-          >
-            Harness the power of tomorrow with our cutting-edge solar technologies. From intelligent
-            panels to AI-driven grid management, we deliver enterprise-grade solutions that transform
-            how energy is generated, managed, and distributed.
-          </p>
-
-          {/* Stats */}
+      {/* Stats Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-6">
           <motion.div
             variants={staggerContainer}
             initial="initial"
-            animate="animate"
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 max-w-4xl mx-auto"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid grid-cols-2 md:grid-cols-4 gap-6"
           >
-            {[
-              { icon: Shield, label: "99.9% Uptime", value: "Guaranteed" },
-              { icon: BarChart3, label: "Energy Efficiency", value: "45% Higher" },
-              { icon: Cpu, label: "AI Processing", value: "Real-time" },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                variants={fadeInUp}
-                className={`
-                  p-6 rounded-xl backdrop-blur-lg border
-                  ${
-                    isDark
-                      ? "bg-gray-800/30 border-gray-700/50"
-                      : "bg-white/30 border-gray-200/50"
-                  }
-                `}
-              >
-                <stat.icon
-                  className={`w-8 h-8 mx-auto mb-3 ${
-                    isDark ? "text-cyan-400" : "text-blue-600"
-                  }`}
-                />
-                <div
-                  className={`text-2xl font-bold mb-1 ${isDark ? "text-white" : "text-gray-800"}`}
-                >
-                  {stat.value}
-                </div>
-                <div className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  {stat.label}
-                </div>
-              </motion.div>
+            {stats.map((stat, index) => (
+              <StatCard key={index} {...stat} isDark={isDark} />
             ))}
           </motion.div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Solutions Grid */}
-        <motion.div
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-        >
-          {solutions.map((solution, index) => (
-            <SolutionCard key={index} solution={solution} isDark={isDark} />
-          ))}
-        </motion.div>
+      {/* Services Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-900"}`}>
+              Our Services
+            </h2>
+            <p className={`text-xl max-w-3xl mx-auto ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+              End-to-end solar solutions designed to maximize efficiency and minimize environmental impact.
+            </p>
+          </motion.div>
 
-        {/* CTA Section */}
-        <motion.div
-          variants={fadeInUp}
-          initial="initial"
-          animate="animate"
-          className={`
-            mt-20 p-12 rounded-3xl backdrop-blur-lg border text-center
-            ${
-              isDark
-                ? "bg-gradient-to-r from-gray-800/50 via-purple-800/30 to-gray-800/50 border-gray-700/50"
-                : "bg-gradient-to-r from-white/50 via-blue-50/50 to-white/50 border-gray-200/50"
-            }
-          `}
-        >
-          <h2 className={`text-4xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-800"}`}>
-            Ready to Transform Your Energy Future?
-          </h2>
-          <p
-            className={`text-lg mb-8 max-w-2xl mx-auto ${isDark ? "text-gray-300" : "text-gray-600"}`}
+          <motion.div
+            variants={staggerContainer}
+            initial="initial"
+            whileInView="animate"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            Join thousands of organizations already benefiting from our advanced solar solutions. Get
-            started with a free consultation and custom energy assessment.
-          </p>
-          <Link
-            href="/contact"
-            className={`
-              px-12 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:scale-105 hover:shadow-2xl inline-block
-              ${
-                isDark
-                  ? "bg-gradient-to-r from-cyan-500 to-purple-500 text-white hover:shadow-cyan-500/25"
-                  : "bg-gradient-to-r from-blue-500 to-teal-500 text-white hover:shadow-blue-500/25"
-              }
-            `}
+            {services.map((service, index) => (
+              <ServiceCard key={index} service={service} isDark={isDark} />
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className={`rounded-3xl p-12 text-center relative overflow-hidden ${isDark
+              ? "bg-gradient-to-br from-gray-800/50 to-orange-900/30 border border-gray-700/50"
+              : "bg-gradient-to-br from-blue-50/50 to-green-50/50 border border-gray-200/50"}`}
           >
-            Schedule Consultation
-          </Link>
-        </motion.div>
-      </main>
+            <div className="relative z-10">
+              <h2 className={`text-4xl md:text-5xl font-bold mb-6 ${isDark ? "text-white" : "text-gray-900"}`}>
+                Ready to Go Solar?
+              </h2>
+              <p className={`text-xl mb-8 max-w-2xl mx-auto ${isDark ? "text-gray-300" : "text-gray-600"}`}>
+                Join thousands of satisfied customers who have made the switch to clean, renewable energy.
+              </p>
+              <Link href="/contact">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`px-10 py-4 rounded-xl font-semibold text-white text-lg transition-all duration-300 ${isDark
+                    ? "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                    : "bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700"
+                    }`}
+                >
+                  Start Your Solar Journey
+                </motion.button>
+              </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       <Footer />
+      <ThemeToggle />
     </div>
   );
 };
 
-export default SolarSolutionsPage;
+export default LandingPage;
