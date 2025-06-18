@@ -465,7 +465,7 @@ const LandingPage = () => {
               transition={{ delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <Link href="/quote">
+              <Link href="/contact">
                 <motion.button
                   whileHover={{ scale: 1.05, boxShadow: isDark ? "0 0 30px rgba(255, 165, 0, 0.3)" : "0 0 30px rgba(59, 130, 246, 0.3)" }}
                   whileTap={{ scale: 0.95 }}
