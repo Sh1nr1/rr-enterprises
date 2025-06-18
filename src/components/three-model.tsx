@@ -15,7 +15,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
   const mainObjectRef = useRef<THREE.Group | null>(null);
 
   // Interactive controls state
-
   const [mouseDown, setMouseDown] = useState(false);
   const [lastMousePos, setLastMousePos] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
@@ -31,12 +30,19 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 300 / 200, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true, 
+      alpha: true,
+      powerPreference: "high-performance"
+    });
 
     renderer.setSize(300, 200);
-    renderer.setClearColor(0x000000, 0); // Clear color with full transparency
+    renderer.setClearColor(0x000000, 0);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Softer shadows
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     mountRef.current.appendChild(renderer.domElement);
 
     // Store references for cleanup and animation
@@ -44,61 +50,121 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
     rendererRef.current = renderer;
     cameraRef.current = camera;
 
-    let mainObject: THREE.Group | null = null; // Object to be animated
+    let mainObject: THREE.Group | null = null;
 
-    // Enhanced lighting setup for better visual quality
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.4); // Soft ambient light
+    // Enhanced lighting setup with better atmosphere
+    const ambientLight = new THREE.AmbientLight(
+      isDark ? 0x404080 : 0x404040, 
+      isDark ? 0.3 : 0.4
+    );
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.2); // Main light source
-    directionalLight.position.set(5, 5, 5);
-    directionalLight.castShadow = true; // Enable shadows from this light
-    directionalLight.shadow.mapSize.width = 1024; // Shadow map resolution
-    directionalLight.shadow.mapSize.height = 1024;
+    // Main directional light with enhanced shadows
+    const directionalLight = new THREE.DirectionalLight(
+      isDark ? 0xffffff : 0xfff8e1, 
+      isDark ? 1.5 : 1.2
+    );
+    directionalLight.position.set(8, 10, 5);
+    directionalLight.castShadow = true;
+    directionalLight.shadow.mapSize.width = 2048;
+    directionalLight.shadow.mapSize.height = 2048;
     directionalLight.shadow.camera.near = 0.5;
     directionalLight.shadow.camera.far = 50;
+    directionalLight.shadow.camera.left = -10;
+    directionalLight.shadow.camera.right = 10;
+    directionalLight.shadow.camera.top = 10;
+    directionalLight.shadow.camera.bottom = -10;
+    directionalLight.shadow.bias = -0.0001;
     scene.add(directionalLight);
 
-    const fillLight = new THREE.DirectionalLight(0x8080ff, 0.3); // Secondary fill light
-    fillLight.position.set(-5, 2, -5);
-    scene.add(fillLight);
+    // Rim lighting for better object definition
+    const rimLight = new THREE.DirectionalLight(
+      isDark ? 0x00ffaa : 0x64b5f6, 
+      0.4
+    );
+    rimLight.position.set(-10, 5, -10);
+    scene.add(rimLight);
 
-    // --- Model Creation Logic (as in your original code) ---
+    // Point light for additional warmth
+    const pointLight = new THREE.PointLight(
+      isDark ? 0xff6b35 : 0xffa726, 
+      0.8, 
+      20
+    );
+    pointLight.position.set(3, 6, 3);
+    pointLight.castShadow = true;
+    pointLight.shadow.mapSize.width = 1024;
+    pointLight.shadow.mapSize.height = 1024;
+    scene.add(pointLight);
+
+    // Environment map for reflections
+    const cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
+    const cubeCamera = new THREE.CubeCamera(0.1, 1000, cubeRenderTarget);
+    scene.add(cubeCamera);
+
+    // --- Enhanced Model Creation Logic ---
     if (type === "site-preparation") {
       const group = new THREE.Group();
 
-      const groundGeometry = new THREE.PlaneGeometry(8, 8);
-      const groundMaterial = new THREE.MeshPhongMaterial({
+      // Enhanced ground with texture-like appearance
+      const groundGeometry = new THREE.PlaneGeometry(10, 10, 32, 32);
+      const groundMaterial = new THREE.MeshLambertMaterial({
         color: isDark ? 0x2c3e50 : 0x8d6e63,
-        shininess: 10,
       });
+      
+      // Add subtle height variation to ground
+      const groundPositions = groundGeometry.attributes.position.array;
+      for (let i = 2; i < groundPositions.length; i += 3) {
+        groundPositions[i] += (Math.random() - 0.5) * 0.1;
+      }
+      groundGeometry.attributes.position.needsUpdate = true;
+      groundGeometry.computeVertexNormals();
+      
       const ground = new THREE.Mesh(groundGeometry, groundMaterial);
       ground.rotation.x = -Math.PI / 2;
       ground.receiveShadow = true;
       group.add(ground);
 
+      // Enhanced excavator body with metallic finish
       const bodyGeometry = new THREE.BoxGeometry(1.5, 1, 2.5);
-      const bodyMaterial = new THREE.MeshPhongMaterial({
+      const bodyMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0xf39c12 : 0xff9800,
-        shininess: 30,
+        metalness: 0.3,
+        roughness: 0.4,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.5,
       });
       const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
       body.position.set(0, 0.5, 0);
       body.castShadow = true;
+      body.receiveShadow = true;
       group.add(body);
 
+      // Enhanced cabin with glass-like material
       const cabinGeometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
-      const cabinMaterial = new THREE.MeshPhongMaterial({
+      const cabinMaterial = new THREE.MeshPhysicalMaterial({
         color: isDark ? 0x34495e : 0x455a64,
+        metalness: 0.1,
+        roughness: 0.1,
+        transmission: 0.3,
+        thickness: 0.1,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.8,
       });
       const cabin = new THREE.Mesh(cabinGeometry, cabinMaterial);
       cabin.position.set(-0.3, 1.1, 0);
       cabin.castShadow = true;
+      cabin.receiveShadow = true;
       group.add(cabin);
 
-      const armGeometry = new THREE.CylinderGeometry(0.08, 0.08, 2, 8);
-      const armMaterial = new THREE.MeshPhongMaterial({
+      // Enhanced hydraulic arm with gradient effect
+      const armGeometry = new THREE.CylinderGeometry(0.08, 0.08, 2, 16);
+      const armMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0xe67e22 : 0xf57c00,
+        metalness: 0.7,
+        roughness: 0.2,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.6,
       });
       const arm = new THREE.Mesh(armGeometry, armMaterial);
       arm.position.set(1, 1, 0);
@@ -106,38 +172,66 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       arm.castShadow = true;
       group.add(arm);
 
-      const bucketGeometry = new THREE.ConeGeometry(0.3, 0.6, 6);
-      const bucket = new THREE.Mesh(bucketGeometry, armMaterial);
+      // Enhanced bucket with wear simulation
+      const bucketGeometry = new THREE.ConeGeometry(0.3, 0.6, 8);
+      const bucketMaterial = new THREE.MeshStandardMaterial({
+        color: isDark ? 0xbdc3c7 : 0x95a5a6,
+        metalness: 0.8,
+        roughness: 0.6,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.4,
+      });
+      const bucket = new THREE.Mesh(bucketGeometry, bucketMaterial);
       bucket.position.set(1.8, 0.3, 0);
       bucket.rotation.x = Math.PI;
       bucket.castShadow = true;
       group.add(bucket);
 
+      // Enhanced tracks with rubber-like material
       for (let i = 0; i < 2; i++) {
         const trackGeometry = new THREE.BoxGeometry(2, 0.3, 0.4);
-        const trackMaterial = new THREE.MeshPhongMaterial({
+        const trackMaterial = new THREE.MeshStandardMaterial({
           color: isDark ? 0x2c3e50 : 0x37474f,
+          metalness: 0.1,
+          roughness: 0.9,
         });
         const track = new THREE.Mesh(trackGeometry, trackMaterial);
         track.position.set(0, 0.15, i === 0 ? -0.8 : 0.8);
         track.castShadow = true;
+        track.receiveShadow = true;
         group.add(track);
+
+        // Add track detail segments
+        for (let j = 0; j < 10; j++) {
+          const segmentGeometry = new THREE.BoxGeometry(0.15, 0.05, 0.4);
+          const segment = new THREE.Mesh(segmentGeometry, trackMaterial);
+          segment.position.set(-0.9 + j * 0.2, 0.32, i === 0 ? -0.8 : 0.8);
+          segment.castShadow = true;
+          group.add(segment);
+        }
       }
 
       scene.add(group);
       mainObject = group;
       camera.position.set(5, 4, 5);
       camera.lookAt(0, 0, 0);
+
     } else if (type === "installation") {
       const group = new THREE.Group();
 
+      // Solar panel installation with enhanced materials
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 4; j++) {
           const panelGeometry = new THREE.BoxGeometry(1.6, 0.05, 1);
-          const panelMaterial = new THREE.MeshPhongMaterial({
+          const panelMaterial = new THREE.MeshPhysicalMaterial({
             color: isDark ? 0x1a1a2e : 0x263238,
-            shininess: 100,
-            reflectivity: 0.3,
+            metalness: 0.1,
+            roughness: 0.1,
+            reflectivity: 0.8,
+            transmission: 0.1,
+            thickness: 0.02,
+            envMap: cubeRenderTarget.texture,
+            envMapIntensity: 1.0,
           });
           const panel = new THREE.Mesh(panelGeometry, panelMaterial);
           panel.position.set(j * 1.8 - 2.7, 1.8, i * 1.2 - 1.2);
@@ -146,22 +240,31 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
           panel.receiveShadow = true;
           group.add(panel);
 
+          // Enhanced frame with metallic finish
           const frameGeometry = new THREE.EdgesGeometry(panelGeometry);
           const frameMaterial = new THREE.LineBasicMaterial({
             color: isDark ? 0x00ff88 : 0x2196f3,
-            linewidth: 2,
+            linewidth: 3,
           });
           const frame = new THREE.LineSegments(frameGeometry, frameMaterial);
           frame.position.copy(panel.position);
           frame.rotation.copy(panel.rotation);
           group.add(frame);
 
+          // Enhanced solar cells with iridescent effect
           for (let cellX = 0; cellX < 6; cellX++) {
             for (let cellY = 0; cellY < 10; cellY++) {
               const cellGeometry = new THREE.PlaneGeometry(0.24, 0.08);
-              const cellMaterial = new THREE.MeshPhongMaterial({
-                color: isDark ? 0x0f172a : 0x1e293b,
-                shininess: 80,
+              const cellMaterial = new THREE.MeshStandardMaterial({
+                color: new THREE.Color().setHSL(
+                  0.6 + (cellX + cellY) * 0.01, 
+                  0.8, 
+                  isDark ? 0.2 : 0.3
+                ),
+                metalness: 0.9,
+                roughness: 0.1,
+                envMap: cubeRenderTarget.texture,
+                envMapIntensity: 0.7,
               });
               const cell = new THREE.Mesh(cellGeometry, cellMaterial);
               cell.position.set(
@@ -176,21 +279,28 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         }
       }
 
+      // Enhanced support structures
       for (let i = 0; i < 4; i++) {
-        const supportGeometry = new THREE.CylinderGeometry(0.06, 0.08, 2.5, 8);
-        const supportMaterial = new THREE.MeshPhongMaterial({
+        const supportGeometry = new THREE.CylinderGeometry(0.06, 0.08, 2.5, 16);
+        const supportMaterial = new THREE.MeshStandardMaterial({
           color: isDark ? 0x7f8c8d : 0x607d8b,
-          shininess: 20,
+          metalness: 0.8,
+          roughness: 0.3,
+          envMap: cubeRenderTarget.texture,
+          envMapIntensity: 0.5,
         });
         const support = new THREE.Mesh(supportGeometry, supportMaterial);
         support.position.set(i * 1.8 - 2.7, 0.75, 0);
         support.castShadow = true;
+        support.receiveShadow = true;
         group.add(support);
 
-        const braceGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 8);
+        // Enhanced bracing
+        const braceGeometry = new THREE.CylinderGeometry(0.03, 0.03, 2, 12);
         const brace = new THREE.Mesh(braceGeometry, supportMaterial);
         brace.position.set(i * 1.8 - 2.7 + 0.9, 1, 0);
         brace.rotation.z = Math.PI / 6;
+        brace.castShadow = true;
         group.add(brace);
       }
 
@@ -198,13 +308,18 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       mainObject = group;
       camera.position.set(7, 5, 7);
       camera.lookAt(0, 1, 0);
+
     } else if (type === "monitoring") {
       const group = new THREE.Group();
 
+      // Enhanced building with architectural details
       const buildingGeometry = new THREE.BoxGeometry(2.5, 2, 2.5);
-      const buildingMaterial = new THREE.MeshPhongMaterial({
+      const buildingMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0x34495e : 0x546e7a,
-        shininess: 20,
+        metalness: 0.2,
+        roughness: 0.7,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.3,
       });
       const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
       building.position.set(0, 1, 0);
@@ -212,64 +327,99 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       building.receiveShadow = true;
       group.add(building);
 
+      // Enhanced windows with realistic glass
       for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 2; j++) {
           const windowGeometry = new THREE.PlaneGeometry(0.4, 0.3);
-          const windowMaterial = new THREE.MeshStandardMaterial({
+          const windowMaterial = new THREE.MeshPhysicalMaterial({
             color: isDark ? 0x00ff88 : 0x4caf50,
             emissive: new THREE.Color(isDark ? 0x004422 : 0x1b5e20),
-            emissiveIntensity: 0.4,
-            transparent: true,
-            opacity: 0.8,
+            emissiveIntensity: 0.6,
+            transmission: 0.7,
+            thickness: 0.05,
+            roughness: 0.1,
+            metalness: 0.0,
+            envMap: cubeRenderTarget.texture,
+            envMapIntensity: 1.0,
           });
           const window = new THREE.Mesh(windowGeometry, windowMaterial);
           window.position.set(-0.6 + i * 0.6, 1.3 - j * 0.4, 1.26);
           group.add(window);
+
+          // Window frames
+          const frameGeometry = new THREE.RingGeometry(0.18, 0.22, 8);
+          const frameMaterial = new THREE.MeshStandardMaterial({
+            color: isDark ? 0x2c3e50 : 0x37474f,
+            metalness: 0.8,
+            roughness: 0.2,
+          });
+          const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+          frame.position.copy(window.position);
+          frame.position.z += 0.01;
+          group.add(frame);
         }
       }
 
+      // Enhanced roof with weathering
       const roofGeometry = new THREE.BoxGeometry(2.8, 0.1, 2.8);
-      const roofMaterial = new THREE.MeshPhongMaterial({
+      const roofMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0x2c3e50 : 0x37474f,
+        metalness: 0.6,
+        roughness: 0.8,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.4,
       });
       const roof = new THREE.Mesh(roofGeometry, roofMaterial);
       roof.position.set(0, 2.1, 0);
       roof.castShadow = true;
+      roof.receiveShadow = true;
       group.add(roof);
 
-      const towerGeometry = new THREE.CylinderGeometry(0.03, 0.05, 3, 8);
-      const towerMaterial = new THREE.MeshPhongMaterial({
+      // Enhanced communication tower
+      const towerGeometry = new THREE.CylinderGeometry(0.03, 0.05, 3, 16);
+      const towerMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0xe74c3c : 0xf44336,
-        shininess: 50,
+        metalness: 0.9,
+        roughness: 0.1,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.8,
       });
       const tower = new THREE.Mesh(towerGeometry, towerMaterial);
       tower.position.set(1.5, 3.5, 1.5);
       tower.castShadow = true;
       group.add(tower);
 
-      const baseGeometry = new THREE.CylinderGeometry(0.2, 0.3, 0.3, 8);
+      // Enhanced base with industrial look
+      const baseGeometry = new THREE.CylinderGeometry(0.2, 0.3, 0.3, 16);
       const base = new THREE.Mesh(baseGeometry, towerMaterial);
       base.position.set(1.5, 2.15, 1.5);
       base.castShadow = true;
       group.add(base);
 
-      const antennaGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+      // Enhanced antenna with glow effect
+      const antennaGeometry = new THREE.SphereGeometry(0.15, 16, 16);
       const antennaMaterial = new THREE.MeshStandardMaterial({
         color: isDark ? 0xff3333 : 0xf44336,
-        emissive: new THREE.Color(0x330000),
-        emissiveIntensity: 0.6,
-        metalness: 0.8,
-        roughness: 0.2,
+        emissive: new THREE.Color(0x440000),
+        emissiveIntensity: 0.8,
+        metalness: 0.9,
+        roughness: 0.1,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 0.6,
       });
       const antenna = new THREE.Mesh(antennaGeometry, antennaMaterial);
       antenna.position.set(1.5, 5, 1.5);
       antenna.castShadow = true;
       group.add(antenna);
 
-      const dishGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.05, 16);
-      const dishMaterial = new THREE.MeshPhongMaterial({
+      // Enhanced satellite dish
+      const dishGeometry = new THREE.CylinderGeometry(0.3, 0.3, 0.05, 32);
+      const dishMaterial = new THREE.MeshStandardMaterial({
         color: 0xcccccc,
-        shininess: 100,
+        metalness: 0.9,
+        roughness: 0.1,
+        envMap: cubeRenderTarget.texture,
+        envMapIntensity: 1.0,
       });
       const dish = new THREE.Mesh(dishGeometry, dishMaterial);
       dish.position.set(1.5, 4.5, 1.5);
@@ -277,10 +427,15 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       dish.castShadow = true;
       group.add(dish);
 
+      // Enhanced security cameras
       for (let i = 0; i < 4; i++) {
-        const cameraGeometry = new THREE.CylinderGeometry(0.05, 0.08, 0.2, 8);
-        const cameraMaterial = new THREE.MeshPhongMaterial({
+        const cameraGeometry = new THREE.CylinderGeometry(0.05, 0.08, 0.2, 12);
+        const cameraMaterial = new THREE.MeshStandardMaterial({
           color: 0x2c3e50,
+          metalness: 0.8,
+          roughness: 0.2,
+          envMap: cubeRenderTarget.texture,
+          envMapIntensity: 0.5,
         });
         const camera = new THREE.Mesh(cameraGeometry, cameraMaterial);
         const angle = (i / 4) * Math.PI * 2;
@@ -292,6 +447,23 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         camera.rotation.y = angle + Math.PI;
         camera.castShadow = true;
         group.add(camera);
+
+        // Camera lens with glass material
+        const lensGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.05, 12);
+        const lensMaterial = new THREE.MeshPhysicalMaterial({
+          color: 0x000000,
+          transmission: 0.9,
+          thickness: 0.02,
+          roughness: 0.0,
+          metalness: 0.0,
+          envMap: cubeRenderTarget.texture,
+          envMapIntensity: 1.0,
+        });
+        const lens = new THREE.Mesh(lensGeometry, lensMaterial);
+        lens.position.copy(camera.position);
+        lens.position.y += 0.12;
+        lens.rotation.copy(camera.rotation);
+        group.add(lens);
       }
 
       scene.add(group);
@@ -302,10 +474,10 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
 
     mainObjectRef.current = mainObject;
 
-    // Mouse interaction handlers
+    // Mouse interaction handlers (unchanged)
     const handleMouseDown = (event: MouseEvent) => {
       setMouseDown(true);
-      setAutoRotate(false); // Stop auto-rotation on user interaction
+      setAutoRotate(false);
       setLastMousePos({ x: event.clientX, y: event.clientY });
     };
 
@@ -315,7 +487,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
       const deltaX = event.clientX - lastMousePos.x;
       const deltaY = event.clientY - lastMousePos.y;
 
-      // Adjust rotation sensitivity as needed
       setRotation((prev) => ({
         x: prev.x + deltaY * 0.01,
         y: prev.y + deltaX * 0.01,
@@ -329,85 +500,89 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
     };
 
     const handleWheel = (event: WheelEvent) => {
-      event.preventDefault(); // Prevent page scrolling
+      event.preventDefault();
       if (camera) {
         const zoomSpeed = 0.1;
-        const direction = event.deltaY > 0 ? 1 : -1; // Scroll up = zoom out, scroll down = zoom in
-        // Limit zoom to prevent camera from going too far or too close
+        const direction = event.deltaY > 0 ? 1 : -1;
         const newPosition = camera.position.clone().multiplyScalar(1 + direction * zoomSpeed);
         const distance = newPosition.length();
-        if (distance > 3 && distance < 20) { // Example limits
+        if (distance > 3 && distance < 20) {
           camera.position.copy(newPosition);
         }
       }
     };
 
-    // Add event listeners to the renderer's DOM element
     renderer.domElement.addEventListener("mousedown", handleMouseDown);
     renderer.domElement.addEventListener("mousemove", handleMouseMove);
     renderer.domElement.addEventListener("mouseup", handleMouseUp);
-    renderer.domElement.addEventListener("wheel", handleWheel, { passive: false }); // Mark as passive: false for preventDefault
+    renderer.domElement.addEventListener("wheel", handleWheel, { passive: false });
 
-    // Cursor styling for interactivity
     renderer.domElement.style.cursor = "grab";
 
-    // Animation loop
+    // Enhanced animation loop
     const animate = () => {
       animationRef.current = requestAnimationFrame(animate);
 
       if (mainObject) {
         if (autoRotate) {
-          mainObject.rotation.y += 0.005; // Continuous auto-rotation
+          mainObject.rotation.y += 0.005;
         } else {
-          // Apply user-controlled rotation
           mainObject.rotation.x = rotation.x;
           mainObject.rotation.y = rotation.y;
         }
 
-        // Special animations for monitoring type
+        // Enhanced monitoring animations
         if (type === "monitoring") {
+          const time = Date.now() * 0.001;
+          
           mainObject.children.forEach((child) => {
-            if (
-              child instanceof THREE.Mesh &&
-              child.geometry instanceof THREE.PlaneGeometry
-            ) {
-              if (child.material instanceof THREE.MeshStandardMaterial) {
-                // Pulsating emissive intensity for windows
-                child.material.emissiveIntensity =
-                  0.4 + Math.sin(Date.now() * 0.003) * 0.2;
-              }
+            // Enhanced window glow animation
+            if (child instanceof THREE.Mesh && 
+                child.geometry instanceof THREE.PlaneGeometry &&
+                child.material instanceof THREE.MeshPhysicalMaterial) {
+              child.material.emissiveIntensity = 0.6 + Math.sin(time * 2) * 0.3;
             }
-            // Animate antenna glowing
-            if (
-              child instanceof THREE.Mesh &&
-              child.geometry instanceof THREE.SphereGeometry
-            ) {
-              child.material.emissiveIntensity =
-                0.6 + Math.sin(Date.now() * 0.005) * 0.3;
+            
+            // Enhanced antenna pulsing
+            if (child instanceof THREE.Mesh && 
+                child.geometry instanceof THREE.SphereGeometry) {
+              child.material.emissiveIntensity = 0.8 + Math.sin(time * 3) * 0.4;
+              child.scale.setScalar(1 + Math.sin(time * 4) * 0.05);
+            }
+          });
+        }
+
+        // Solar panel shimmer effect
+        if (type === "installation") {
+          const time = Date.now() * 0.001;
+          mainObject.children.forEach((child) => {
+            if (child instanceof THREE.Mesh && 
+                child.material instanceof THREE.MeshStandardMaterial &&
+                child.geometry instanceof THREE.PlaneGeometry) {
+              const hue = 0.6 + Math.sin(time + child.position.x + child.position.z) * 0.1;
+              child.material.color.setHSL(hue, 0.8, 0.3);
             }
           });
         }
       }
 
-      renderer.render(scene, camera); // Render the scene with the camera
+      renderer.render(scene, camera);
     };
     animate();
 
-    // Cleanup function for when the component unmounts
+    // Cleanup function (unchanged)
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
 
-      // Remove all event listeners to prevent memory leaks
       renderer.domElement.removeEventListener("mousedown", handleMouseDown);
       renderer.domElement.removeEventListener("mousemove", handleMouseMove);
       renderer.domElement.removeEventListener("mouseup", handleMouseUp);
       renderer.domElement.removeEventListener("wheel", handleWheel);
 
-      // Remove the canvas from the DOM
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
       }
-      // Dispose Three.js resources to prevent memory leaks
+      
       renderer.dispose();
       scene.traverse((object) => {
         if (object instanceof THREE.Mesh) {
@@ -420,14 +595,13 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         }
       });
     };
-  }, [type, isDark, rotation, mouseDown, autoRotate, lastMousePos.x, lastMousePos.y]); // Dependencies for useCallback
+  }, [type, isDark, rotation, mouseDown, autoRotate, lastMousePos.x, lastMousePos.y]);
 
   useEffect(() => {
-    const cleanup = renderModel(); // Initial render and cleanup
+    const cleanup = renderModel();
     return cleanup;
-  }, [renderModel]); // Re-run effect if renderModel changes
+  }, [renderModel]);
 
-  // Function to reset view to initial auto-rotate state
   const resetView = () => {
     setRotation({ x: 0, y: 0 });
     setAutoRotate(true);
@@ -437,7 +611,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
     <div className="relative w-full h-full group">
       <div ref={mountRef} className="w-full h-full" />
 
-      {/* Interactive controls overlay (reset button) */}
       <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         <button
           onClick={resetView}
@@ -452,7 +625,6 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
         </button>
       </div>
 
-      {/* Interaction hint */}
       <div
         className={`absolute bottom-2 left-2 text-xs px-2 py-1 rounded-md backdrop-blur-sm border opacity-60 transition-opacity duration-300 ${
           isDark
@@ -469,4 +641,4 @@ const ThreeJSModel = ({ type, isDark }: { type: string; isDark: boolean }) => {
   );
 };
 
-export default ThreeJSModel; // Export the component
+export default ThreeJSModel;
