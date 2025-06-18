@@ -247,14 +247,14 @@ function HeroSection() {
                                 </span>
                             </h1>
                             <p className={`text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed
-                                ${isDark ? 'text-white/80' : 'text-gray-700'}`}>
+                                ${isDark ? 'text-white/80' : 'text-white/80'}`}>
                                 Leading Solar EPC Solutions with ₹80 Cr+ Turnover
                             </p>
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="space-y-6">
                             <p className={`text-lg md:text-xl max-w-4xl mx-auto
-                                ${isDark ? 'text-white/70' : 'text-gray-600'}`}>
+                                ${isDark ? 'text-white/70' : 'text-white/70'}`}>
                                 Trusted by industry giants like Hero Future Energy, Renew Power, and Adani Solar.
                                 We engineer sustainable energy solutions that power the future of India.
                             </p>
