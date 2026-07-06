@@ -45,82 +45,152 @@ interface Project {
 const rawProjectsData = [
   {
     id: 1,
-    title: "Smart City Infrastructure",
-    location: "Mumbai, Maharashtra",
-    client: "Municipal Corporation",
-    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop",
-    category: "Infrastructure",
-    state: "Maharashtra",
-    status: "Completed"
-  },
-  {
-    id: 2,
-    title: "Industrial Complex Development",
-    location: "Ahmedabad, Gujarat",
-    client: "Gujarat Industries Ltd",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop",
-    category: "Industrial",
-    state: "Gujarat",
+    title: "112.5 MWp Solar PV - SECI VI Kurnool",
+    location: "Kurnool, Andhra Pradesh",
+    client: "Hero Future Energies",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar EPC",
+    state: "Andhra Pradesh",
     status: "In Progress"
   },
   {
-    id: 3,
-    title: "Renewable Energy Park",
-    location: "Indore, Madhya Pradesh",
-    client: "Green Energy Corp",
+    id: 2,
+    title: "300 MW Solar BOS - Bikaner",
+    location: "Bikaner, Rajasthan",
+    client: "Renew Power",
     image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
-    category: "Energy",
-    state: "Madhya Pradesh",
+    category: "Solar BOS",
+    state: "Rajasthan",
+    status: "Completed"
+  },
+  {
+    id: 3,
+    title: "300 MW SECI VI Solar Project",
+    location: "Rajasthan",
+    client: "SECI VI",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar BOS",
+    state: "Rajasthan",
     status: "Completed"
   },
   {
     id: 4,
-    title: "Heritage Resort Complex",
-    location: "Jaipur, Rajasthan",
-    client: "Royal Hospitality Group",
-    image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600&h=400&fit=crop",
-    category: "Hospitality",
+    title: "210 MW Amazon Solar Project",
+    location: "Rajasthan",
+    client: "Amazon",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar BOS",
     state: "Rajasthan",
-    status: "Planning"
+    status: "Completed"
   },
   {
     id: 5,
-    title: "Tech Park Development",
-    location: "Pune, Maharashtra",
-    client: "TechnoSpace Solutions",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
-    category: "Technology",
-    state: "Maharashtra",
+    title: "150 MW Solar BOS - Pavagada Solar Park",
+    location: "Pavagada, Karnataka",
+    client: "Renew Power",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar BOS",
+    state: "Karnataka",
     status: "Completed"
   },
   {
     id: 6,
-    title: "Petrochemical Facility",
-    location: "Vadodara, Gujarat",
-    client: "Petro Industries",
-    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop",
-    category: "Industrial",
-    state: "Gujarat",
-    status: "In Progress"
+    title: "60 MW Solar PV - Narikudi",
+    location: "Narikudi, Tamil Nadu",
+    client: "SunEdison",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar BOS",
+    state: "Tamil Nadu",
+    status: "Completed"
   },
   {
     id: 7,
-    title: "Agricultural Innovation Center",
-    location: "Bhopal, Madhya Pradesh",
-    client: "AgriTech Foundation",
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&h=400&fit=crop",
-    category: "Agriculture",
+    title: "26 MW Solar PV - Sitamau",
+    location: "Sitamau, Madhya Pradesh",
+    client: "SunEdison",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar BOS",
     state: "Madhya Pradesh",
     status: "Completed"
   },
   {
     id: 8,
-    title: "Desert Solar Installation",
-    location: "Jodhpur, Rajasthan",
-    client: "Solar Dynamics Ltd",
+    title: "20 MW Solar PV - Khambhat",
+    location: "Khambhat, Gujarat",
+    client: "ACME Solar",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar BOS",
+    state: "Gujarat",
+    status: "Completed"
+  },
+  {
+    id: 9,
+    title: "20 MW Solar PV - Charanka Solar Park",
+    location: "Charanka, Gujarat",
+    client: "Kiran Energy",
     image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
-    category: "Energy",
+    category: "Solar BOS",
+    state: "Gujarat",
+    status: "Completed"
+  },
+  {
+    id: 10,
+    title: "5 MW Solar PV - Pune",
+    location: "Pune, Maharashtra",
+    client: "Finolex",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar BOS",
+    state: "Maharashtra",
+    status: "Completed"
+  },
+  {
+    id: 11,
+    title: "5 MW DMRC Solar Project - Neemrana",
+    location: "Neemrana, Rajasthan",
+    client: "Tata Power Solar (DMRC)",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar BOS",
     state: "Rajasthan",
+    status: "Completed"
+  },
+  {
+    id: 12,
+    title: "25 MW Solar BOS - Malkhed",
+    location: "Malkhed, Maharashtra",
+    client: "Akruti Engineering Works (Bondada Group)",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar EPC",
+    state: "Maharashtra",
+    status: "In Progress"
+  },
+  {
+    id: 13,
+    title: "25 MW Solar BOS - Mangladevi",
+    location: "Mangladevi, Maharashtra",
+    client: "Akruti Engineering Works (Bondada Group)",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar EPC",
+    state: "Maharashtra",
+    status: "In Progress"
+  },
+  {
+    id: 14,
+    title: "7 MWp Solar PV - Dhule (Vikhran)",
+    location: "Dhule, Maharashtra",
+    client: "Saatvik Greentech",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Solar EPC",
+    state: "Maharashtra",
+    status: "In Progress"
+  },
+  {
+    id: 15,
+    title: "5.2 MWp Solar PV - Karwad",
+    location: "Karwad, Maharashtra",
+    client: "Saatvik Greentech",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Solar EPC",
+    state: "Maharashtra",
     status: "In Progress"
   }
 ] as const; // Add 'as const' here
@@ -189,7 +259,7 @@ const ProjectsShowcase = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
 
-  const filters = ['All', 'Maharashtra', 'Gujarat', 'Madhya Pradesh', 'Rajasthan'];
+  const filters = ['All', 'Andhra Pradesh', 'Maharashtra', 'Rajasthan', 'Gujarat', 'Karnataka', 'Madhya Pradesh', 'Tamil Nadu'];
 
   useEffect(() => {
     if (activeFilter === 'All') {
@@ -432,8 +502,8 @@ const ProjectsShowcase = () => {
                 transition={{ type: "spring", stiffness: 300, damping: 25 }}
                 className="group"
               >
-                {/* Fixed Link component - removed legacyBehavior and anchor tag */}
-                <Link href={`/projects/${project.slug}`} className="block">
+                {/* Card is informational only — no per-project detail pages */}
+                <div className="block">
                   {/* Using ShadCN Card */}
                   <Card className={`overflow-hidden border-0 shadow-2xl backdrop-blur-xl ${
                     isDarkMode
@@ -493,7 +563,7 @@ const ProjectsShowcase = () => {
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                </div>
               </motion.div>
             ))}
           </motion.div>
@@ -533,7 +603,7 @@ const ProjectsShowcase = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {[
               { label: 'Total Projects', value: allProjects.length }, // Use allProjects here too
-              { label: 'States Covered', value: 4 }, // This value is hardcoded, consider deriving it if dynamic
+              { label: 'States Covered', value: 7 },
               { label: 'Completed', value: allProjects.filter(p => p.status === 'Completed').length },
               { label: 'In Progress', value: allProjects.filter(p => p.status === 'In Progress').length }
             ].map((stat, index) => (

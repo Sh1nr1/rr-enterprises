@@ -29,87 +29,73 @@ interface Project {
   featured?: boolean;
 }
 
-// New project data provided by the user
+// Featured real projects (see full list on /projects)
 const rawProjects = [
   {
     id: 1,
-    title: "Smart City Infrastructure",
-    location: "Mumbai, Maharashtra",
-    client: "Municipal Corporation",
-    image: "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=600&h=400&fit=crop",
-    category: "Infrastructure",
-    state: "Maharashtra",
-    status: "Completed"
+    title: "112.5 MWp Solar PV - SECI VI Kurnool",
+    location: "Kurnool",
+    client: "Hero Future Energies",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Energy",
+    state: "Andhra Pradesh",
+    status: "In Progress",
+    capacity: "112.5 MWp"
   },
   {
     id: 2,
-    title: "Industrial Complex Development",
-    location: "Ahmedabad, Gujarat",
-    client: "Gujarat Industries Ltd",
-    image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&h=400&fit=crop",
-    category: "Industrial",
-    state: "Gujarat",
-    status: "In Progress"
+    title: "300 MW Solar BOS - Bikaner",
+    location: "Bikaner",
+    client: "Renew Power",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Energy",
+    state: "Rajasthan",
+    status: "Completed",
+    capacity: "300 MW"
   },
   {
     id: 3,
-    title: "Renewable Energy Park",
-    location: "Indore, Madhya Pradesh",
-    client: "Green Energy Corp",
-    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
-    category: "Energy",
-    state: "Madhya Pradesh",
-    status: "Completed"
-  },
-  {
-    id: 4,
-    title: "Heritage Resort Complex",
-    location: "Jaipur, Rajasthan",
-    client: "Royal Hospitality Group",
-    image: "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=600&h=400&fit=crop",
-    category: "Hospitality",
-    state: "Rajasthan",
-    status: "Planning"
-  },
-  {
-    id: 5,
-    title: "Tech Park Development",
-    location: "Pune, Maharashtra",
-    client: "TechnoSpace Solutions",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop",
-    category: "Technology",
-    state: "Maharashtra",
-    status: "Completed"
-  },
-  {
-    id: 6,
-    title: "Petrochemical Facility",
-    location: "Vadodara, Gujarat",
-    client: "Petro Industries",
-    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=600&h=400&fit=crop",
-    category: "Industrial",
-    state: "Gujarat",
-    status: "In Progress"
-  },
-  {
-    id: 7,
-    title: "Agricultural Innovation Center",
-    location: "Bhopal, Madhya Pradesh",
-    client: "AgriTech Foundation",
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=600&h=400&fit=crop",
-    category: "Agriculture",
-    state: "Madhya Pradesh",
-    status: "Completed"
-  },
-  {
-    id: 8,
-    title: "Desert Solar Installation",
-    location: "Jodhpur, Rajasthan",
-    client: "Solar Dynamics Ltd",
+    title: "210 MW Amazon Solar Project",
+    location: "Rajasthan",
+    client: "Amazon",
     image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
     category: "Energy",
     state: "Rajasthan",
-    status: "In Progress"
+    status: "Completed",
+    capacity: "210 MW"
+  },
+  {
+    id: 4,
+    title: "150 MW Solar BOS - Pavagada Solar Park",
+    location: "Pavagada",
+    client: "Renew Power",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Energy",
+    state: "Karnataka",
+    status: "Completed",
+    capacity: "150 MW"
+  },
+  {
+    id: 5,
+    title: "25 MW Solar BOS - Malkhed",
+    location: "Malkhed",
+    client: "Akruti Engineering Works (Bondada Group)",
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?w=600&h=400&fit=crop",
+    category: "Energy",
+    state: "Maharashtra",
+    status: "In Progress",
+    capacity: "25 MW"
+  },
+  {
+    id: 6,
+    title: "5.2 MWp Solar PV - Karwad",
+    location: "Karwad",
+    client: "Saatvik Greentech",
+    image: "https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=600&h=400&fit=crop",
+    category: "Energy",
+    state: "Maharashtra",
+    status: "In Progress",
+    capacity: "5.2 MWp"
   }
 ];
 
@@ -130,10 +116,10 @@ const projects: Project[] = rawProjects.map(rawProject => ({
   location: `${rawProject.location}, ${rawProject.state}`, // Combine location and state
   image: rawProject.image,
   slug: generateSlug(rawProject.title), // Generate slug from title
-  capacity: "N/A", // Default value as capacity is not in the new data
-  completionDate: rawProject.status === "Completed" ? "2024" : "Ongoing", // Derive from status
+  capacity: rawProject.capacity,
+  completionDate: rawProject.status === "Completed" ? "Completed" : "Ongoing", // Derive from status
   category: rawProject.category as Project['category'], // Type assertion for category
-  featured: rawProject.status === "Completed" && (rawProject.id === 1 || rawProject.id === 3 || rawProject.id === 5) // Example of featuring some completed projects
+  featured: rawProject.id === 1 || rawProject.id === 2 || rawProject.id === 3 // Flagship projects
 }));
 
 
@@ -325,7 +311,7 @@ const ProjectsSection: React.FC = () => {
                   </div>
 
                   {/* Action Button */}
-                  <Link href={`/projects/${project.slug}`} className="block">
+                  <Link href="/projects" className="block">
                     <motion.div
                       className="flex items-center justify-between p-3 rounded-lg border transition-all duration-300 group/btn cursor-pointer
                                  bg-gray-100/50 hover:bg-emerald-500/20
@@ -337,7 +323,7 @@ const ProjectsSection: React.FC = () => {
                     >
                       <span className="group-hover/btn:text-emerald-600 transition-colors duration-300
                                        text-gray-700 dark:text-white dark:group-hover/btn:text-emerald-100">
-                        View Project
+                        View All Projects
                       </span>
                       <ArrowRight className="w-4 h-4 text-emerald-400 group-hover/btn:translate-x-1 transition-transform duration-300" />
                     </motion.div>
@@ -359,7 +345,7 @@ const ProjectsSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 1.5 }}
         >
           <p className="mb-6 text-gray-600 dark:text-slate-400">
-            Want to see your project featured here?
+            Explore our complete 1000+ MW project portfolio.
           </p>
           <Link href="/projects">
             <motion.button

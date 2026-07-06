@@ -176,39 +176,39 @@ const ParticleBackground = () => {
 
 const timelineData = [
   {
-    year: '2018',
+    year: '2011',
     title: 'Foundation',
-    description: 'RR Enterprises established with a vision to democratize solar energy across India.',
+    description: 'RR Enterprises founded in Ahmedabad by Mr. Ravi Shankar Singh (B.E. Civil, ex-L&T ECC Construction Group) to deliver civil and solar EPC works.',
     icon: <Sun className="w-6 h-6" />,
     milestone: 'Company Founded',
   },
   {
-    year: '2019',
-    title: 'First Major Contract',
-    description: 'Secured our first 10MW solar installation project, marking our entry into large-scale operations.',
+    year: '2012–16',
+    title: 'Early Utility-Scale Projects',
+    description: 'Executed solar BOS works including 20 MW ACME Solar (Khambhat), 20 MW Kiran Energy (Charanka Solar Park), 5 MW Finolex (Pune), and 26 MW & 60 MW SunEdison projects in MP and Tamil Nadu.',
     icon: <Award className="w-6 h-6" />,
-    milestone: '10MW Milestone',
+    milestone: '130+ MW Delivered',
   },
   {
-    year: '2021',
-    title: 'Rapid Expansion',
-    description: 'Expanded operations across 5 states with a dedicated team of 50+ professionals.',
+    year: '2017–22',
+    title: 'Marquee Projects',
+    description: 'Delivered 150 MW at Pavagada Solar Park (Karnataka) and 300 MW at Bikaner (Rajasthan) for Renew Power — among India\'s largest solar parks.',
     icon: <Globe className="w-6 h-6" />,
-    milestone: '5 States Coverage',
+    milestone: '450 MW for Renew Power',
   },
   {
-    year: '2023',
-    title: 'Industry Leadership',
-    description: 'Achieved ₹8 Cr+ annual turnover, establishing ourselves as a trusted solar solutions provider.',
+    year: '2023–25',
+    title: 'Crossing 1000 MW',
+    description: 'Completed the 300 MW SECI VI and 210 MW Amazon solar projects in Rajasthan, taking the cumulative executed portfolio past 1000 MW.',
     icon: <TrendingUp className="w-6 h-6" />,
-    milestone: '₹8 Cr+ Turnover',
+    milestone: '1000+ MW Portfolio',
   },
   {
-    year: '2024',
-    title: 'Innovation Hub',
-    description: 'Launched our R&D division focusing on next-generation solar technologies and smart grid solutions.',
+    year: '2026',
+    title: 'Multi-State Execution',
+    description: 'Executing ~175 MW concurrently: 112.5 MWp SECI-VI for Hero Future Energies (Kurnool, AP), two Saatvik Greentech sites, and two 25 MW Akruti/Bondada sites in Maharashtra.',
     icon: <Zap className="w-6 h-6" />,
-    milestone: 'R&D Launch',
+    milestone: '~175 MW Under Execution',
   },
 ];
 
@@ -248,30 +248,30 @@ const values = [
 ];
 
 const stats = [
-  { 
-    number: '₹8Cr+', 
-    label: 'Annual Turnover', 
+  {
+    number: '₹22Cr+',
+    label: 'Annual Turnover',
     icon: <TrendingUp className="w-6 h-6" />,
     color: 'from-green-500/20 to-emerald-500/20',
     glowColor: 'hover:shadow-green-500/25'
   },
-  { 
-    number: '20+', 
-    label: 'Projects Completed', 
+  {
+    number: '15+',
+    label: 'Utility-Scale Projects',
     icon: <CheckCircle className="w-6 h-6" />,
     color: 'from-blue-500/20 to-cyan-500/20',
     glowColor: 'hover:shadow-blue-500/25'
   },
-  { 
-    number: '50MW+', 
-    label: 'Total Capacity Installed', 
+  {
+    number: '1000MW+',
+    label: 'Total Capacity Executed',
     icon: <Zap className="w-6 h-6" />,
     color: 'from-yellow-500/20 to-orange-500/20',
     glowColor: 'hover:shadow-yellow-500/25'
   },
-  { 
-    number: '5', 
-    label: 'States Covered', 
+  {
+    number: '7+',
+    label: 'States Covered',
     icon: <MapPin className="w-6 h-6" />,
     color: 'from-purple-500/20 to-pink-500/20',
     glowColor: 'hover:shadow-purple-500/25'
@@ -633,14 +633,15 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <h3 className="text-3xl font-bold mb-6 group-hover:text-primary transition-colors duration-300">
-                  Meet Our Executive Team
+                  Mr. Ravi Shankar Singh — Proprietor &amp; Founder
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-8 max-w-3xl mx-auto group-hover:text-foreground transition-colors duration-300">
-                  Our leadership team brings together decades of experience in renewable energy,
-                  engineering excellence, and business strategy. Together, they guide RR Enterprises
-                  toward a sustainable future while maintaining our commitment to innovation and quality.
+                  A civil engineer (B.E. Civil) with 29+ years of experience in civil engineering and
+                  infrastructure, including 12 years with Larsen &amp; Toubro (L&amp;T) ECC Construction Group.
+                  He leads RR Enterprises with a planning-driven approach, supported by dedicated site teams
+                  of qualified engineers, supervisors and safety officers at every project.
                 </p>
-                <Link href="/about/team1" passHref legacyBehavior>
+                <Link href="/contact" passHref legacyBehavior>
                   <Button
                     className="relative overflow-hidden group/btn bg-gradient-to-r from-primary to-accent hover:from-primary/80 hover:to-accent/80 text-primary-foreground border-0 rounded-full px-8 py-4 text-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                     asChild

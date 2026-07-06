@@ -381,10 +381,10 @@ const LandingPage = () => {
 
   // Memoized stats data
   const stats = useMemo(() => [
-    { icon: Home, label: "Projects Completed", value: "12+" },
-    { icon: Shield, label: "Years Experience", value: "9+" },
-    { icon: BarChart3, label: "Energy Generated", value: "50MW+" },
-    { icon: Settings, label: "Certified Installers", value: "12+" }
+    { icon: Home, label: "Utility-Scale Projects", value: "15+" },
+    { icon: Shield, label: "Years Experience", value: "15+" },
+    { icon: BarChart3, label: "Solar Capacity Executed", value: "1000MW+" },
+    { icon: Settings, label: "Skilled Workforce", value: "100+" }
   ], []);
 
   // Show loading state until theme is resolved

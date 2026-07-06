@@ -100,8 +100,9 @@ const Footer: React.FC = () => {
               </div>
               <p className={`leading-relaxed mb-6 max-w-md text-sm transition-colors duration-500
                 ${isDark ? "text-gray-300" : "text-gray-700"}`}> {/* Darker text for readability on bright background */}
-                Innovating the future with cutting-edge solutions and exceptional service.
-                Your trusted partner in digital transformation and technological advancement.
+                Civil &amp; Solar EPC contractor delivering utility-scale balance-of-system works
+                across India since 2011 — from piling to commissioning. Trusted Infrastructure
+                Partner Since 2011.
               </p>
 
               {/* Contact Info */}
@@ -119,9 +120,9 @@ const Footer: React.FC = () => {
                     <Mail className={`w-4 h-4 transition-colors duration-300
                       ${isDark ? "text-cyan-400 group-hover:drop-shadow-[0_0_5px_rgba(0,255,255,0.6)]" : "text-blue-600 group-hover:drop-shadow-[0_0_5px_rgba(59,130,246,0.5)]"}`} /> {/* Darker icon color */}
                   </motion.div>
-                  <a href="mailto:info@rrenterprises.one" className={`relative group overflow-hidden transition-colors duration-300
+                  <a href="mailto:rrenterprises1224@gmail.com" className={`relative group overflow-hidden transition-colors duration-300
                     ${isDark ? "text-gray-300 hover:text-cyan-400" : "text-gray-700 hover:text-blue-700"}`}> {/* Darker text and subtle hover */}
-                    info@rrenterprises.one
+                    rrenterprises1224@gmail.com
                     <span className={`absolute bottom-0 left-0 w-full h-px transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left
                       ${isDark ? "bg-gradient-to-r from-cyan-400 to-blue-400" : "bg-gradient-to-r from-blue-500 to-indigo-500"}`}></span> {/* Softer underline */}
                   </a>

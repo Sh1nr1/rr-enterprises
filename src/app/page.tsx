@@ -40,19 +40,21 @@ const itemVariants = {
 }
 
 const statsData = [
-    { value: 80, suffix: 'Cr+', label: 'Revenue Generated', prefix: '₹' },
-    { value: 20, suffix: '+', label: 'Projects Completed' },
-    { value: 500, suffix: 'MW+', label: 'Solar Capacity' },
-    { value: 9, suffix: '+', label: 'Years Experience' },
+    { value: 22, suffix: 'Cr+', label: 'Annual Turnover', prefix: '₹' },
+    { value: 15, suffix: '+', label: 'Utility-Scale Projects' },
+    { value: 1000, suffix: 'MW+', label: 'Solar Capacity Executed' },
+    { value: 15, suffix: '+', label: 'Years Experience' },
 ]
 
 const clientLogos = [
-    { name: 'Hero Future Energy', logo: '/logos/hero-future.svg' },
+    { name: 'Hero Future Energies', logo: '/logos/hero-future.svg' },
+    { name: 'Saatvik Greentech', logo: '/logos/saatvik.svg' },
+    { name: 'Bondada Engineering', logo: '/logos/bondada.svg' },
+    { name: 'L&T', logo: '/logos/lnt.svg' },
     { name: 'Renew Power', logo: '/logos/renew-power.svg' },
-    { name: 'Adani Solar', logo: '/logos/adani-solar.svg' },
-    { name: 'BonDadda', logo: '/logos/bondadda.svg' },
-    { name: 'Tata Power', logo: '/logos/tata-power.svg' },
-    { name: 'NTPC', logo: '/logos/ntpc.svg' },
+    { name: 'Vikram Solar', logo: '/logos/vikram-solar.svg' },
+    { name: 'Tata Power Solar', logo: '/logos/tata-power.svg' },
+    { name: 'Adani Green Energy', logo: '/logos/adani-green.svg' },
 ]
 
 // --- AnimatedCounter Component ---
@@ -248,15 +250,15 @@ function HeroSection() {
                             </h1>
                             <p className={`text-xl md:text-2xl max-w-3xl mx-auto leading-relaxed
                                 ${isDark ? 'text-white/80' : 'text-white/80'}`}>
-                                Leading Solar EPC Solutions with ₹80 Cr+ Turnover
+                                Civil &amp; Solar EPC — 1000+ MW Executed Across India Since 2011
                             </p>
                         </motion.div>
 
                         <motion.div variants={itemVariants} className="space-y-6">
                             <p className={`text-lg md:text-xl max-w-4xl mx-auto
                                 ${isDark ? 'text-white/70' : 'text-white/70'}`}>
-                                Trusted by industry giants like Hero Future Energy, Renew Power, and Adani Solar.
-                                We engineer sustainable energy solutions that power the future of India.
+                                Trusted by industry leaders like Hero Future Energies, Renew Power, and Adani Green Energy.
+                                From piling to commissioning, we deliver complete balance-of-system works for utility-scale solar.
                             </p>
 
                             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -449,11 +451,6 @@ const DynamicProjectsSection = dynamic(() => import('@/components/sections/Proje
     loading: () => <div className="py-24 text-center text-gray-500 dark:text-gray-400">Loading projects...</div>,
 });
 
-const DynamicTestimonialsSection = dynamic(() => import('@/components/sections/TestimonialsSection'), {
-    ssr: false,
-    loading: () => <div className="py-24 text-center text-gray-500 dark:text-gray-400">Loading testimonials...</div>,
-});
-
 const DynamicCTASection = dynamic(() => import('@/components/sections/CTASection'), {
     ssr: false,
     loading: () => <div className="py-24 text-center text-gray-500 dark:text-gray-400">Loading call to action...</div>,
@@ -471,14 +468,14 @@ export default function HomePage() {
         >
             <Head>
                 <title>RR Enterprises - Leading Solar EPC Solutions in India</title>
-                <meta name="description" content="RR Enterprises provides top-tier Solar EPC solutions, engineering sustainable energy across India with 80Cr+ revenue and 50+ completed projects. Trusted by industry leaders." />
-                <meta name="keywords" content="Solar EPC, Solar Energy India, Solar Solutions, Renewable Energy, Solar Power Projects, Solar Developers, India Solar, Hero Future Energy, Renew Power, Adani Solar, Tata Power, NTPC, solar installations" />
+                <meta name="description" content="RR Enterprises is a Civil & Solar EPC contractor with 1000+ MW of utility-scale solar balance-of-system works executed across India since 2011. Trusted by Hero Future Energies, Renew Power, Tata Power Solar and more." />
+                <meta name="keywords" content="Solar EPC, Solar BOS, Solar Energy India, Renewable Energy, Solar Power Projects, Utility-Scale Solar, Piling, MMS Erection, Hero Future Energies, Renew Power, Saatvik Greentech, Bondada, Tata Power Solar, Adani Green Energy" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="icon" href="/favicon.ico" />
 
                 {/* Open Graph / Social Media Meta Tags */}
                 <meta property="og:title" content="RR Enterprises - Leading Solar EPC Solutions in India" />
-                <meta property="og:description" content="RR Enterprises provides top-tier Solar EPC solutions, engineering sustainable energy across India with 80Cr+ revenue and 50+ completed projects. Trusted by industry leaders." />
+                <meta property="og:description" content="RR Enterprises is a Civil & Solar EPC contractor with 1000+ MW of utility-scale solar balance-of-system works executed across India since 2011. Trusted by industry leaders." />
                 <meta property="og:type" content="website" />
                 <meta property="og:url" content="https://www.rrenterprises.one/" />
                 <meta property="og:image" content="https://www.rrenterprises.one/rr-logo.jpg" />
@@ -490,7 +487,7 @@ export default function HomePage() {
                 {/* <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:creator" content="@YourTwitterHandle" />
                 <meta name="twitter:title" content="RR Enterprises - Leading Solar EPC Solutions in India" />
-                <meta name="twitter:description" content="RR Enterprises provides top-tier Solar EPC solutions, engineering sustainable energy across India with 80Cr+ revenue and 50+ completed projects. Trusted by industry leaders." />
+                <meta name="twitter:description" content="RR Enterprises is a Civil & Solar EPC contractor with 1000+ MW of utility-scale solar balance-of-system works executed across India since 2011." />
                 <meta name="twitter:image" content="https://www.rrenterprises.one/twitter-image.jpg" /> */}
 
                 {/* Canonical URL */}
@@ -524,15 +521,6 @@ export default function HomePage() {
                     variants={containerVariants}
                 >
                     <DynamicProjectsSection />
-                </motion.div>
-
-                <motion.div
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.1 }}
-                    variants={containerVariants}
-                >
-                    <DynamicTestimonialsSection />
                 </motion.div>
 
                 <motion.div
